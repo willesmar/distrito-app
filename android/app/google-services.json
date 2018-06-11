@@ -1,0 +1,66 @@
+{
+  "project_info": {
+    "project_number": "454095678870",
+    "firebase_url": "https://iasd-oliveira3-fb.firebaseio.com",
+    "project_id": "iasd-oliveira3-fb",
+    "storage_bucket": "iasd-oliveira3-fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:454095678870:android:1bc938d9765c3aaf",
+        "android_client_info": {
+          "package_name": "br.com.willesmartapps.iasdol3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "454095678870-65rf5c17scrsruohmuvt89q9gnsuvqha.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.willesmartapps.iasdol3",
+            "certificate_hash": "453611f0abd834cf264a39a9e9c041b99e024d3f"
+          }
+        },
+        {
+          "client_id": "454095678870-ghpgeajav7b1ug4gvrattku8k9a9s4fd.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "454095678870-ghpgeajav7b1ug4gvrattku8k9a9s4fd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqsGAvhaJ6LhDngpVUn7973x3kCEumSns"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "454095678870-ghpgeajav7b1ug4gvrattku8k9a9s4fd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "454095678870-4l85088tlimibc63225q0f8la22qeum0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.com.willsmartapps.iasdol3"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
