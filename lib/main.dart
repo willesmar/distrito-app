@@ -27,6 +27,54 @@ class MyHomePage extends StatelessWidget {
   const MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
 
+  _dataPorExtenso(num timestamp) {
+    // print(timestamp);
+    var data = new DateTime.fromMillisecondsSinceEpoch(timestamp);
+    // print(data.toString());
+    return "${data.day.toString()} de ${_nomeMeses(data.month)} de ${data.year.toString()}";
+  }
+
+  _nomeMeses(num m) {
+    switch (m) {
+      case 1:
+        return 'janeiro';
+        break;
+      case 2:
+        return 'fevereiro';
+        break;
+      case 3:
+        return 'março';
+        break;
+      case 4:
+        return 'abril';
+        break;
+      case 5:
+        return 'maio';
+        break;
+      case 6:
+        return 'junho';
+        break;
+      case 7:
+        return 'julho';
+        break;
+      case 8:
+        return 'agosto';
+        break;
+      case 9:
+        return 'setembro';
+        break;
+      case 10:
+        return 'outubro';
+        break;
+      case 11:
+        return 'novembro';
+        break;
+      case 12:
+        return 'dezembro';
+        break;
+    }
+  }
+
   _buildListItem(BuildContext context, DocumentSnapshot document) {
     // return new ListTile(
     //   key: new ValueKey(document.documentID),
@@ -53,6 +101,25 @@ class MyHomePage extends StatelessWidget {
       child: new Column(
         children: <Widget>[
           // new Image.network('$imgUrl'),
+          new Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: new Row(
+              children: <Widget>[
+                new Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: new Icon(
+                    Icons.calendar_today,
+                    size: 16.0,
+                  ),
+                ),
+                new Expanded(
+                    child: new Text(
+                  _dataPorExtenso(document['timestamp']),
+                  style: new TextStyle(fontSize: 16.0),
+                )),
+              ],
+            ),
+          ),
           new Container(
             constraints: new BoxConstraints.expand(
               height: 200.0,
@@ -66,8 +133,7 @@ class MyHomePage extends StatelessWidget {
               ),
             ),
             child: new Container(
-              new Canvas(recorder),
-                          child: new Text(document['titulo'],
+              child: new Text(document.data['titulo'],
                   style: new TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 25.0,
@@ -135,20 +201,22 @@ class MyHomePage extends StatelessWidget {
           // return new Text('data');
           // print(msgs.length);
           // print();
-          final size = snapshot.data.documents.length;
-          final msgs = snapshot.data.documents;
-          for (var i = 0; i < size; i++) {
-            var msg = msgs[i].data;
-            print(msg['titulo']);
-            var img = msg['imagem'];
-            print(img['nameFile']);
-            // var doc = new Mensagem.fromJson(docs[i].data);
-            // print(docs[i].data['imagem']);
-            // print(doc.timestamp);
-            // print('Título => ');
-            // new Mensagem.fromJson(jsonEncode(jsonDecode(msg)))
-            // print('Título => ${msg['titulo']}');
-          }
+          // final size = snapshot.data.documents.length;
+          // final msgs = snapshot.data.documents;
+          // for (var i = 0; i < size; i++) {
+          //   var msg = msgs[i].data;
+          //   // print(msg['titulo']);
+          //   // print(msg['data']);
+          //   // print(msg['timestamp']);
+          //   // var img = msg['imagem'];
+          //   // print(img['nameFile']);
+          //   // var doc = new Mensagem.fromJson(docs[i].data);
+          //   // print(docs[i].data['imagem']);
+          //   // print(doc.timestamp);
+          //   // print('Título => ');
+          //   // new Mensagem.fromJson(jsonEncode(jsonDecode(msg)))
+          //   // print('Título => ${msg['titulo']}');
+          // }
           return new ListView.builder(
               itemCount: snapshot.data.documents.length,
               //padding: const EdgeInsets.only(top: 10.0),
