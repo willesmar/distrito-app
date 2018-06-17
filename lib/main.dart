@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+// import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:jaguar_serializer/jaguar_serializer.dart';
+
 import 'model/mensagem/mensagem.dart';
 import 'model/imagem.dart';
-import 'dart:convert';
 
 void main() => runApp(new MyApp());
 
@@ -12,6 +13,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Intl.defaultLocale = 'pt_BR';
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Test Firebase',
@@ -30,7 +32,9 @@ class MyHomePage extends StatelessWidget {
   _dataPorExtenso(num timestamp) {
     // print(timestamp);
     var data = new DateTime.fromMillisecondsSinceEpoch(timestamp);
-    // print(data.toString());
+    // var format = new DateFormat.yMd("ar");
+    // var dateString = format.format(data);
+    // print(dateString.toString());
     return "${data.day.toString()} de ${_nomeMeses(data.month)} de ${data.year.toString()}";
   }
 

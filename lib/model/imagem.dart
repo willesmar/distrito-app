@@ -1,6 +1,3 @@
-import 'package:jaguar_serializer/jaguar_serializer.dart';
-part 'imagem.jser.dart';
-
 class Imagem {
   String createdAt;
   String nameFile;
@@ -15,8 +12,4 @@ class Imagem {
       url: json['url'],
     );
   }
-}
-
-@GenSerializer()
-  class ImagemJsonSerializer extends Serializer<Imagem> with _$ImagemJsonSerializer {
 }

@@ -1,6 +1,3 @@
-import 'package:jaguar_serializer/jaguar_serializer.dart';
-part 'like.jser.dart';
-
 class Like {
   num qtd;
   List<String> users;
@@ -14,6 +11,3 @@ class Like {
   //   );
   // }
 }
-
-@GenSerializer()
-class LikeJsonSerializer extends Serializer<Like> with _$LikeJsonSerializer {}

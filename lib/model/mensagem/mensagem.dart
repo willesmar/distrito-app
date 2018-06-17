@@ -1,9 +1,7 @@
-import 'package:jaguar_serializer/jaguar_serializer.dart';
 import './autor.dart';
 import '../comentario.dart';
 import '../like.dart';
 import '../imagem.dart';
-part 'mensagem.jser.dart';
 
 class Mensagem {
   Autor autor;
@@ -53,7 +51,3 @@ class Mensagem {
   //       json['comentarios']);
   // }
 }
-
-@GenSerializer()
-class MensagemJsonSerializer extends Serializer<Mensagem>
-    with _$MensagemJsonSerializer {}
