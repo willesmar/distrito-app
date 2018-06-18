@@ -16,7 +16,7 @@ void main() {
   runApp(new MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Colors.green[600],
+        primaryColor: Colors.green[900],
       ),
       home: new MyTabs()));
 }
@@ -45,7 +45,7 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return new Scaffold(
       bottomNavigationBar: new Material(
-          color: Colors.green[600],
+          color: Colors.green[900],
           child: new TabBar(
             controller: controller,
             labelStyle: new TextStyle(fontSize: 9.0),
@@ -61,7 +61,7 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
               ),
               new Tab(
                 icon: new Icon(Icons.event_note),
-                text: 'Anúncios',
+                text: 'Comunicação',
               ),
               new Tab(
                 icon: new Icon(Icons.local_activity),
@@ -77,10 +77,10 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
         controller: controller,
         children: <Widget>[
           new mensagens.Mensagens(),
+          new crm.ComunhaoRelacionamentoMissao(),
           new anuncios.Anuncios(),
           new programa.Programa(),
           new sobre.Sobre(),
-          new crm.ComunhaoRelacionamentoMissao()
         ],
       ),
     );
