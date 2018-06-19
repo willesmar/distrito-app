@@ -4,60 +4,76 @@ import '../utils/functions.dart' as fn;
 import './msg_detalhe.dart';
 
 class Mensagens extends StatelessWidget {
-  // final List cards = new List.generate(20, (i) => new CustomCard()).toList();
-
   _buildListItem(BuildContext context, DocumentSnapshot document) {
     final img = document['imagem'];
     final imgUrl = img['url'];
     return new GestureDetector(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => MensagemDetalhe(document: document)));
-      }, //=> debugPrint(document['titulo']),
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MensagemDetalhe(document: document)));
+      },
       child: new Card(
         key: new ValueKey(document.documentID),
         elevation: 2.0,
         child: new Column(
           children: <Widget>[
-            new Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: new Row(
-                children: <Widget>[
-                  new Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: new Icon(
-                      Icons.calendar_today,
-                      size: 16.0,
-                    ),
-                  ),
-                  new Expanded(
-                      child: new Text(
-                    fn.dataPorExtenso(document['timestamp']),
-                    style: new TextStyle(fontSize: 16.0),
-                  )),
-                ],
-              ),
-            ),
             new Container(
               constraints: new BoxConstraints.expand(
                 height: 200.0,
               ),
-              alignment: Alignment.bottomLeft,
-              padding: new EdgeInsets.only(left: 16.0, bottom: 8.0),
-              decoration: new BoxDecoration(
-                image: new DecorationImage(
-                  image: new NetworkImage(imgUrl),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: new Container(
-                child: new Text(document.data['titulo'],
-                    style: new TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25.0,
-                      color: Colors.white,
-                      decorationColor: Colors.red,
-                    )),
+              child: new Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  new Image.network(imgUrl, fit: BoxFit.cover),
+                  new Positioned(
+                    left: 0.0,
+                    right: 0.0,
+                    bottom: 0.0,
+                    child: new Container(
+                      decoration: new BoxDecoration(
+                        gradient: new LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.8),
+                            ]),
+                      ),
+                      padding: const EdgeInsets.all(18.0),
+                      child: new Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          new Expanded(
+                            child: new Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                new Text(
+                                  document.data['titulo'],
+                                  style: new TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 25.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                new Text(
+                                  'por ${document.data['autor']['nome']}',
+                                  style: new TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 15.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             new Padding(
