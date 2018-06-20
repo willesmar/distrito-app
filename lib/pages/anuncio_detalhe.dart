@@ -1,3 +1,4 @@
+import 'package:distrito_app/utils/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:html2md/html2md.dart' as html2md;
 
@@ -15,6 +16,11 @@ class AnuncioDetalhe extends StatelessWidget {
     pessoa(itens) {
       itens.forEach((item) {
         debugPrint('${item['nome']}, ${item['predicado']}');
+        return ListTile(
+          // leading: Icon(Icons.phone),
+          title: Text(item['nome']),
+          subtitle: Text(item['predicado']),
+        );
       });
     }
 
@@ -30,6 +36,21 @@ class AnuncioDetalhe extends StatelessWidget {
       debugPrint('${cronograma[0]['preletores'][0]['nome']} e outros');
     }
 
+    _getEventInfo() {
+      if (cronograma.length > 0) {
+        cronograma.forEach((cron) {
+          // pessoa(cron['preletores']);
+          // pessoa(cron['cantores']);
+          // debugPrint(cron['timestamp'].toString());
+          // debugPrint('${cron['local']['nome']}, ${cron['local']['endereco']}');
+          return ListTile(
+              leading: Icon(Icons.pin_drop),
+              title: new Text(cron['local']['nome']),
+              subtitle: new Text(cron['local']['endereco']));
+        });
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(document['nome']),
@@ -41,6 +62,27 @@ class AnuncioDetalhe extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               new Image.network(document['imagem']['url'], fit: BoxFit.cover),
+              new ListTile(
+                leading: Icon(Icons.calendar_today),
+                title: new Text(
+                    'De ${dataPorExtensoAbreviada(cronograma[0]['timestamp'])} à ${dataPorExtensoAbreviada(cronograma[cronogramaSize - 1]['timestamp'])}'),
+              ),
+              new ListTile(
+                leading: Icon(Icons.pin_drop),
+                title: new Text(document['cronograma'][0]['local']['nome']),
+                subtitle:
+                    new Text(document['cronograma'][0]['local']['endereco']),
+              ),
+              // new Container(
+
+              //                 child: new ListView(children: <Widget>[
+              //     // _getEventInfo(),
+              //     ListTile(
+              //   leading: Icon(Icons.pin_drop),
+              //   title: new Text(document['cronograma'][0]['local']['nome']),
+              //   subtitle: new Text(document['cronograma'][0]['local']['endereco']))
+              //   ]),
+              // ),
               new Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: new Text(
