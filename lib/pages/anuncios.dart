@@ -42,9 +42,7 @@ class AnunciosState extends State<Anuncios> {
               constraints: new BoxConstraints.expand(
                 height: 200.0,
               ),
-              child: new Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
+              child: new Stack(fit: StackFit.expand, children: <Widget>[
                 new Image.network(imgUrl, fit: BoxFit.cover),
                 new Positioned(
                   left: 0.0,
@@ -155,7 +153,9 @@ class AnunciosState extends State<Anuncios> {
             .where('publicado', isEqualTo: true)
             .snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) return const Text('Carregando...');
+          if (!snapshot.hasData) {
+            return LinearProgressIndicator();
+          }
           return new ListView.builder(
               itemCount: snapshot.data.documents.length,
               itemBuilder: (context, index) {

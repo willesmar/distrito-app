@@ -111,7 +111,9 @@ class Mensagens extends StatelessWidget {
             .where('publicado', isEqualTo: true)
             .snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) return const Text('Carregando...');
+          if (!snapshot.hasData) {
+            return CircularProgressIndicator();
+          }
           return new ListView.builder(
               itemCount: snapshot.data.documents.length,
               itemBuilder: (context, index) {
