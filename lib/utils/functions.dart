@@ -8,6 +8,11 @@ String dataPorExtensoAbreviada(num timestamp) {
   return "${data.day.toString()} ${_nomeMesesAbreviado(data.month)} ${data.year.toString()}";
 }
 
+String diaSemana(num timestamp) {
+  var data = new DateTime.fromMillisecondsSinceEpoch(timestamp);
+  return _nomeDiaSemana(data.weekday);
+}
+
 _nomeMeses(num m) {
   switch (m) {
     case 1:
@@ -86,6 +91,32 @@ _nomeMesesAbreviado(num m) {
       break;
     case 12:
       return 'Dez';
+      break;
+  }
+}
+
+_nomeDiaSemana(num m) {
+  switch (m) {
+    case 1:
+      return 'Domingo';
+      break;
+    case 2:
+      return 'Segunda-feira';
+      break;
+    case 3:
+      return 'Terça-feira';
+      break;
+    case 4:
+      return 'Quarta-feira';
+      break;
+    case 5:
+      return 'Quinta-feira';
+      break;
+    case 6:
+      return 'Sexta-feira';
+      break;
+    case 7:
+      return 'Sábado';
       break;
   }
 }
