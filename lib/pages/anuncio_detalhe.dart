@@ -36,6 +36,15 @@ class AnuncioDetalhe extends StatelessWidget {
       debugPrint('${cronograma[0]['preletores'][0]['nome']} e outros');
     }
 
+    _getCron(cron) {
+      debugPrint(cron);
+      return ListTile(
+        title: Text(dataPorExtensoAbreviada(cron['timestamp'])),
+        subtitle: Text(
+            '${diaSemana(cron['timestamp'])} às ${cron['hora'].toString()}'),
+      );
+    }
+
     _getEventInfo() {
       if (cronograma.length > 0) {
         cronograma.forEach((cron) {
@@ -62,13 +71,21 @@ class AnuncioDetalhe extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               new Image.network(document['imagem']['url'], fit: BoxFit.cover),
+              // new ListView.builder(
+              //   itemCount: cronograma.length,
+              //   itemBuilder: (context, index) {
+              //     final cron = cronograma[index];
+              //     return _getCron(cron);
+              //   },
+              // ),
               new ListTile(
                 leading: Icon(Icons.calendar_today),
-                title: new Text(
-                    'De ${dataPorExtensoAbreviada(cronograma[0]['timestamp'])} à ${dataPorExtensoAbreviada(cronograma[cronogramaSize - 1]['timestamp'])}'),
+                title: Text(dataPorExtensoAbreviada(cronograma[0]['timestamp'])),
+        subtitle: Text(
+            '${diaSemana(cronograma[0]['timestamp'])} às ${cronograma[0]['hora'].toString()}'),
               ),
               new ListTile(
-                leading: Icon(Icons.pin_drop),
+                leading: Icon(Icons.pin_drop, color: Colors.black),
                 title: new Text(document['cronograma'][0]['local']['nome']),
                 subtitle:
                     new Text(document['cronograma'][0]['local']['endereco']),
