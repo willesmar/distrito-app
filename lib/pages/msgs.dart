@@ -103,7 +103,7 @@ class Mensagens extends StatelessWidget {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('Mensagens'),
-        backgroundColor: Colors.green[800],
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: new StreamBuilder(
         stream: Firestore.instance

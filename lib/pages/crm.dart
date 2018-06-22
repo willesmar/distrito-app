@@ -6,14 +6,14 @@ class ComunhaoRelacionamentoMissao extends StatelessWidget {
     return new Scaffold(
         appBar: new AppBar(
           title: new Text('CRM'),
-          backgroundColor: Colors.teal[900],
+          backgroundColor: Theme.of(context).primaryColor,
         ),
         body: new Container(
           child: new Center(
             child: new Icon(
               Icons.work,
               size: 150.0,
-              color: Colors.teal[900],
+              color: Theme.of(context).primaryColor,
             ),
           ),
         ));

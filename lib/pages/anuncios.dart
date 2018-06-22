@@ -103,21 +103,21 @@ class AnunciosState extends State<Anuncios> {
                 ],
               ),
             ),
-            new Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: new RichText(
-                text: new TextSpan(
-                  text: 'Hello ',
-                  style: DefaultTextStyle.of(context).style,
-                  children: <TextSpan>[
-                    new TextSpan(
-                        text: 'bold',
-                        style: new TextStyle(fontWeight: FontWeight.bold)),
-                    new TextSpan(text: ' world!'),
-                  ],
-                ),
-              ),
-            ),
+            // new Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: new RichText(
+            //     text: new TextSpan(
+            //       text: 'Hello ',
+            //       style: DefaultTextStyle.of(context).style,
+            //       children: <TextSpan>[
+            //         new TextSpan(
+            //             text: 'bold',
+            //             style: new TextStyle(fontWeight: FontWeight.bold)),
+            //         new TextSpan(text: ' world!'),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             new Row(
               children: <Widget>[
                 new Flexible(
@@ -145,7 +145,7 @@ class AnunciosState extends State<Anuncios> {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('Comunicação'),
-        backgroundColor: Colors.green[600],
+        backgroundColor: Theme.of(context).primaryColor, //Colors.green[600],
       ),
       body: new StreamBuilder(
         stream: Firestore.instance
