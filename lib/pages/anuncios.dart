@@ -85,8 +85,10 @@ class AnunciosState extends State<Anuncios> {
               ]),
             ),
             new Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 8.0),
               child: new Row(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   new Padding(
                     padding: const EdgeInsets.only(right: 8.0),
@@ -97,7 +99,7 @@ class AnunciosState extends State<Anuncios> {
                   ),
                   new Expanded(
                       child: new Text(
-                    'data', //fn.dataPorExtenso(document['timestamp']),
+                    '${fn.dataPorExtensoAbreviada(document.data['cronograma'][0]['timestamp'])} ${document.data['cronograma'].length > 1 ? 'à': ''} ${document.data['cronograma'].length > 1 ? fn.dataPorExtensoAbreviada(document.data['cronograma'][document.data['cronograma'].length - 1]['timestamp']) : '' }',
                     style: new TextStyle(fontSize: 16.0),
                   )),
                 ],
@@ -122,7 +124,7 @@ class AnunciosState extends State<Anuncios> {
               children: <Widget>[
                 new Flexible(
                   child: new Padding(
-                    padding: new EdgeInsets.all(12.0),
+                    padding: new EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 12.0),
                     child: new Text(
                       descricaoMarkdown,
                       textAlign: TextAlign.justify,
