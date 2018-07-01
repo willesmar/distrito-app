@@ -9,7 +9,9 @@ void main() {
   runApp(new MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Colors.lightBlueAccent[700],
+        primaryColor: Color(0xFF36424E), //Colors.lightBlueAccent[700],
+        backgroundColor: Color(0xFFF3FDFE),
+        bottomAppBarColor: Color(0xFF90979F),
       ),
       home: new MyTabs()));
 }
