@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../utils/functions.dart' as fn;
 import './msg_detalhe.dart';
 
+// TODO: tipos de midia: imagem, video
 class Mensagens extends StatelessWidget {
   _buildListItem(BuildContext context, DocumentSnapshot document) {
     final img = document['imagem'];
@@ -14,85 +15,88 @@ class Mensagens extends StatelessWidget {
             MaterialPageRoute(
                 builder: (context) => MensagemDetalhe(document: document)));
       },
-      child: new Card(
-        key: new ValueKey(document.documentID),
-        elevation: 2.0,
-        child: new Column(
-          children: <Widget>[
-            new Container(
-              constraints: new BoxConstraints.expand(
-                height: 200.0,
-              ),
-              child: new Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  new Image.network(imgUrl, fit: BoxFit.cover),
-                  new Positioned(
-                    left: 0.0,
-                    right: 0.0,
-                    bottom: 0.0,
-                    child: new Container(
-                      decoration: new BoxDecoration(
-                        gradient: new LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.transparent,
-                              Colors.black.withOpacity(0.8),
-                            ]),
-                      ),
-                      padding: const EdgeInsets.all(18.0),
-                      child: new Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          new Expanded(
-                            child: new Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                new Text(
-                                  document.data['titulo'],
-                                  style: new TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 25.0,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                new Text(
-                                  'por ${document.data['autor']['nome']}',
-                                  style: new TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 15.0,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            new Padding(
-                padding: new EdgeInsets.all(7.0),
-                child: new Row(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(6.0, 3.0, 6.0, 3.0),
+        child: new Card(
+          key: new ValueKey(document.documentID),
+          elevation: 2.0,
+          child: new Column(
+            children: <Widget>[
+              new Container(
+                constraints: new BoxConstraints.expand(
+                  height: 200.0,
+                ),
+                child: new Stack(
+                  fit: StackFit.expand,
                   children: <Widget>[
-                    new Flexible(
-                      child: new Padding(
-                        padding: new EdgeInsets.all(7.0),
-                        child: new Text(
-                          document['passagem'],
-                          textAlign: TextAlign.justify,
-                          style: new TextStyle(fontSize: 16.0),
+                    new Image.network(imgUrl, fit: BoxFit.cover),
+                    new Positioned(
+                      left: 0.0,
+                      right: 0.0,
+                      bottom: 0.0,
+                      child: new Container(
+                        decoration: new BoxDecoration(
+                          gradient: new LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.transparent,
+                                Colors.black.withOpacity(0.8),
+                              ]),
+                        ),
+                        padding: const EdgeInsets.all(18.0),
+                        child: new Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            new Expanded(
+                              child: new Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  new Text(
+                                    document.data['titulo'],
+                                    style: new TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  new Text(
+                                    'por ${document.data['autor']['nome']}',
+                                    style: new TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 15.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ),
                   ],
-                )),
-          ],
+                ),
+              ),
+              new Padding(
+                  padding: new EdgeInsets.all(7.0),
+                  child: new Row(
+                    children: <Widget>[
+                      new Flexible(
+                        child: new Padding(
+                          padding: new EdgeInsets.all(7.0),
+                          child: new Text(
+                            document['passagem'],
+                            textAlign: TextAlign.justify,
+                            style: new TextStyle(fontSize: 16.0),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+            ],
+          ),
         ),
       ),
     );
@@ -105,21 +109,24 @@ class Mensagens extends StatelessWidget {
         title: new Text('Mensagens'),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: new StreamBuilder(
-        stream: Firestore.instance
-            .collection('mensagens')
-            .where('publicado', isEqualTo: true)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return CircularProgressIndicator();
-          }
-          return new ListView.builder(
-              itemCount: snapshot.data.documents.length,
-              itemBuilder: (context, index) {
-                return _buildListItem(context, snapshot.data.documents[index]);
-              });
-        },
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(0.0, 3.0, 0.0, 3.0),
+        child: new StreamBuilder(
+          stream: Firestore.instance
+              .collection('mensagens')
+              .where('publicado', isEqualTo: true)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return CircularProgressIndicator();
+            }
+            return new ListView.builder(
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (context, index) {
+                  return _buildListItem(context, snapshot.data.documents[index]);
+                });
+          },
+        ),
       ),
     );
   }

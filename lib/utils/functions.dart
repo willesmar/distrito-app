@@ -1,3 +1,8 @@
+String dataCompleta(num timestamp) {
+  var data = new DateTime.fromMillisecondsSinceEpoch(timestamp);
+  return "${_nomeDiaSemana(data.weekday)}, ${data.day.toString()} de ${_nomeMeses(data.month)} de ${data.year.toString()}";
+}
+
 String dataPorExtenso(num timestamp) {
   var data = new DateTime.fromMillisecondsSinceEpoch(timestamp);
   return "${data.day.toString()} de ${_nomeMeses(data.month)} de ${data.year.toString()}";
