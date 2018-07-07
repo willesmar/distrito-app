@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../utils/functions.dart' as fn;
@@ -14,19 +12,19 @@ class Programa extends StatefulWidget {
 }
 
 class ProgramaState extends State<Programa> {
-  String _appBarTitle = 'Programa';
-  bool hasData;
-  Widget _appBar;
-  Color _primary;
-  double _size;
+  // String _appBarTitle = 'Programa';
+  // bool hasData;
+  // Widget _appBar;
+  // Color _primary;
+  // double _size;
 
   @override
   void initState() {
     super.initState();
-    _appBarTitle = 'Programa';
-    _primary = Theme.of(context).primaryColor;
-    _size = MediaQuery.of(context).size.width;
-    _appBar = _initAppBar(context);
+    // _appBarTitle = 'Programa';
+    // _primary = Theme.of(context).primaryColor;
+    // _size = MediaQuery.of(context).size.width;
+    // _appBar = _initAppBar(context);
   }
 
   @override
@@ -73,7 +71,7 @@ class ProgramaState extends State<Programa> {
 
     listaPrograma.add(
       Container(
-        decoration: BoxDecoration(color: Color(0xFFA7B9D1)),
+        decoration: BoxDecoration(color: Color(0xFF90979F)),
         padding: EdgeInsets.only(top: 8.0),
         child: ListTile(
           dense: true,
@@ -95,6 +93,8 @@ class ProgramaState extends State<Programa> {
         ),
       ),
     );
+
+    listaPrograma.add(Divider(height: 1.0,));
 
     if (louvorSize > 0) {
       listaPrograma.addAll(_makeAtividade(louvor, grupoAtividade: 'Louvor'));
@@ -238,44 +238,43 @@ class ProgramaState extends State<Programa> {
     );
   }
 
-  Widget _initAppBar(BuildContext context, {document: null}) {
-    if (document == null) {
-      return AppBar(
-        title: Text(_appBarTitle != null ? _appBarTitle : 'Programa'),
-        backgroundColor: _primary, //Colors.green[600],
-      );
-    }
-    return PreferredSize(
-      preferredSize: new Size(_size, 20.0),
-      child: ListTile(
-        dense: true,
-        title: Center(
-          child: Text(
-            document['nomePrograma'].toString().toUpperCase(),
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 24.0,
-                color: Colors.white),
-          ),
-        ),
-        subtitle: Center(
-          child: Text(
-            fn.dataCompleta(document['timestamp']),
-            style: new TextStyle(fontSize: 16.0, color: Colors.white),
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _initAppBar(BuildContext context, {document: null}) {
+  //   if (document == null) {
+  //     return AppBar(
+  //       title: Text(_appBarTitle != null ? _appBarTitle : 'Programa'),
+  //       backgroundColor: _primary, //Colors.green[600],
+  //     );
+  //   }
+  //   return PreferredSize(
+  //     preferredSize: new Size(_size, 20.0),
+  //     child: ListTile(
+  //       dense: true,
+  //       title: Center(
+  //         child: Text(
+  //           document['nomePrograma'].toString().toUpperCase(),
+  //           style: TextStyle(
+  //               fontWeight: FontWeight.bold,
+  //               fontSize: 24.0,
+  //               color: Colors.white),
+  //         ),
+  //       ),
+  //       subtitle: Center(
+  //         child: Text(
+  //           fn.dataCompleta(document['timestamp']),
+  //           style: new TextStyle(fontSize: 16.0, color: Colors.white),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: _appBar,
-      // new AppBar(
-      //   title: new Text(_appBarTitle != null ? _appBarTitle : 'Programa'),
-      //   backgroundColor: Theme.of(context).primaryColor, //Colors.green[600],
-      // ),
+      appBar: AppBar(
+        title: new Text('Programa'),
+        backgroundColor: Theme.of(context).primaryColor, //Colors.green[600],
+      ),
       body: new StreamBuilder(
         stream: Firestore.instance
             .collection('programas')
@@ -285,13 +284,6 @@ class ProgramaState extends State<Programa> {
           if (!snapshot.hasData) {
             return LinearProgressIndicator();
           }
-
-          _appBarTitle = snapshot.data.documents.first['nomePrograma']
-              .toString()
-              .toUpperCase();
-
-          _appBar =
-              _initAppBar(context, document: snapshot.data.documents.first);
           return new ListView.builder(
               itemCount: 1,
               itemBuilder: (context, index) {
