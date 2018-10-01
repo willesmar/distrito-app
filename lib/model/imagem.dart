@@ -1,5 +1,5 @@
 class Imagem {
-  String createdAt;
+  DateTime createdAt;
   String nameFile;
   String url;
 

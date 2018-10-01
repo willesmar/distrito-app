@@ -4,12 +4,17 @@ description: A new Flutter project.
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore: ^0.7.3
+  cloud_firestore: "^0.8.0"
+  firebase_messaging: "^2.0.0"
   flutter_html_view: "^0.5.1"
-  html2md: "^0.1.5"
-  flutter_markdown: "^0.1.5"
+  html2md: "^0.2.1"
+  flutter_markdown:
+    git: https://github.com/KevinTheGray/flutter_markdown
   shared_preferences: "^0.4.2"
-  screen: "^0.0.3"
+  screen: "^0.0.4"
+  url_launcher: ^3.0.3
+  rxdart: ^0.18.1
+  cached_network_image: "^0.4.1"
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -37,6 +42,11 @@ flutter:
   assets:
     - assets/images/iasd_ol3.jpg #assets/images/iasd_ol3.jpg
     - assets/images/map.png
+    - assets/images/circular.png
+    - assets/images/simbolo_iasd.png
+    - assets/images/pcalvarenga.jpg
+    - assets/images/placeholder-image.png
+    - assets/images/splash-bg.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
@@ -63,3 +73,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
+  fonts:
+  - family:  CustomIcons
+    fonts:
+      - asset: assets/fonts/CustomIcons.ttf

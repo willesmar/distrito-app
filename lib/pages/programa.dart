@@ -1,48 +1,47 @@
+import 'package:distrito_app/model/atividade.dart';
+import 'package:distrito_app/model/programa.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:screen/screen.dart';
 
 import '../utils/functions.dart' as fn;
+import '../utils/bloc.dart';
 
-// TODO: titulo com nome do programa, data completa abaixo
-// TODO: aba/collapse de escala
-// TODO: onClick mark as completed
-// TODO: criar aba de transição/extras
+// TODO: titulo com nome do programa, data completa abaixo OK
+// TODO: aba/collapse de escala OK
+// TODO: onClick mark as completed TRY
+// TODO: criar aba de transição/extras OK
 class Programa extends StatefulWidget {
   @override
   ProgramaState createState() => new ProgramaState();
 }
 
 class ProgramaState extends State<Programa> {
-  // String _appBarTitle = 'Programa';
-  // bool hasData;
-  // Widget _appBar;
-  // Color _primary;
-  // double _size;
+  ScrollController _scrollViewController;
   bool _toggle = false;
   Color _corCirculoTimeline = Color(0xFFA7B9D1);
+  Color topColor = Color(0xFF2F557F);
 
   @override
   void initState() {
     super.initState();
+    _scrollViewController = new ScrollController();
     _toggle = false;
     _corCirculoTimeline = Color(0xFFA7B9D1);
-    // _appBarTitle = 'Programa';
-    // _primary = Theme.of(context).primaryColor;
-    // _size = MediaQuery.of(context).size.width;
-    // _appBar = _initAppBar(context);
     // Screen.keepOn(true);
   }
 
   @override
   void dispose() {
-    super.dispose();
+    _scrollViewController.dispose();
     Screen.keepOn(false);
     _toggle = false;
     _corCirculoTimeline = Color(0xFFA7B9D1);
+    super.dispose();
   }
 
-  List<Widget> _makeAtividade(List atividade, {String grupoAtividade: null}) {
+  List<Widget> _makeAtividade(List<Atividade> atividade,
+      {String grupoAtividade: null}) {
     List<Widget> listaAtividade = [];
     List<Widget> listaRetornada = [];
 
@@ -52,12 +51,12 @@ class ProgramaState extends State<Programa> {
 
     if (grupoAtividade != null) {
       listaRetornada.add(Container(
-          decoration: BoxDecoration(color: Color(0xFFA7B9D1)),
+          decoration: BoxDecoration(color: topColor),
           child: ExpansionTile(
             initiallyExpanded: true,
-            backgroundColor: Color(0xFFA7B9D1),
+            backgroundColor: topColor,
             title: Text(
-              grupoAtividade.toString(), //.toUpperCase(),
+              grupoAtividade.toString(),
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20.0,
@@ -65,22 +64,6 @@ class ProgramaState extends State<Programa> {
             ),
             children: listaAtividade.toList(),
           )));
-      // itemZero = Container(
-      //   decoration: BoxDecoration(color: Color(0xFFA7B9D1)),
-      //   child: ListTile(
-      //     dense: true,
-      //     // contentPadding: EdgeInsets.only(left: 70.0),
-      //     title: Center(
-      //       child: Text(
-      //         grupoAtividade.toString(), //.toUpperCase(),
-      //         style: TextStyle(
-      //             fontWeight: FontWeight.bold,
-      //             fontSize: 20.0,
-      //             color: Colors.white),
-      //       ),
-      //     ),
-      //   ),
-      // );
     } else {
       listaRetornada = listaAtividade;
     }
@@ -88,7 +71,7 @@ class ProgramaState extends State<Programa> {
     return listaRetornada;
   }
 
-  Widget makeEscala(String departamento, List<dynamic> integrantes) {
+  Widget makeEscala(String departamento, List<String> integrantes) {
     String ministerio = '';
     List<Widget> listaEscala = [];
     switch (departamento) {
@@ -120,7 +103,13 @@ class ProgramaState extends State<Programa> {
         ministerio = 'Ministério';
     }
     integrantes.forEach((integrante) {
-      listaEscala.add(Chip(label: Text(integrante)));
+      listaEscala.add(Chip(
+        label: Text(
+          integrante,
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
+        backgroundColor: Color(0xFF3E8391).withOpacity(0.3),
+      ));
     });
     return ListTile(
       title: Padding(
@@ -135,27 +124,23 @@ class ProgramaState extends State<Programa> {
     );
   }
 
-  Widget _generateListCards(BuildContext context, document) {
+  Widget _generateListCards(BuildContext context, ProgramaModel prgrm) {
     List<Widget> listaPrograma = [];
-    Map<dynamic, dynamic> escala = document['equipes'];
-    List louvor = document['louvor'];
-    num louvorSize = louvor.length;
-    List escolaSabatina = document['escolaSabatina'];
-    num esSize = escolaSabatina.length;
-    List extra = document['extra'];
-    num extraSize = extra.length;
-    List culto = document['culto'];
-    num cultoSize = culto.length;
+    Map<dynamic, dynamic> escala = prgrm.equipes;
+    num louvorSize = prgrm.louvor.length;
+    num esSize = prgrm.escolaSabatina.length;
+    num extraSize = prgrm.extra.length;
+    num cultoSize = prgrm.culto.length;
 
     listaPrograma.add(
       Container(
-        decoration: BoxDecoration(color: Color(0xFF90979F)),
+        decoration: BoxDecoration(color: topColor),
         padding: EdgeInsets.only(top: 8.0),
         child: ListTile(
           dense: true,
           title: Center(
             child: Text(
-              document['nomePrograma'].toString().toUpperCase(),
+              prgrm.nomePrograma.toString().toUpperCase(),
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24.0,
@@ -164,7 +149,7 @@ class ProgramaState extends State<Programa> {
           ),
           subtitle: Center(
             child: Text(
-              fn.dataCompleta(document['timestamp']),
+              fn.dataCompleta(prgrm.timestamp),
               style: new TextStyle(fontSize: 16.0, color: Colors.white),
             ),
           ),
@@ -172,22 +157,18 @@ class ProgramaState extends State<Programa> {
       ),
     );
 
-    listaPrograma.add(Divider(
-      height: 1.0,
-    ));
-
-    if (escala.isNotEmpty) {
+    if (escala != null) {
       List<Widget> listaEscala = [];
       escala.keys.forEach((key) {
-        List<dynamic> integrantes = escala[key];
+        List<String> integrantes = escala[key].cast<String>();
         listaEscala.add(makeEscala(key, integrantes));
       });
       listaPrograma.add(Container(
-          decoration: BoxDecoration(color: Color(0xFFA7B9D1)),
+          decoration: BoxDecoration(color: topColor),
           child: ExpansionTile(
-            backgroundColor: Color(0xFFA7B9D1),
+            backgroundColor: topColor,
             title: Text(
-              'Escalas', //.toUpperCase(),
+              'Escalas',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20.0,
@@ -204,25 +185,27 @@ class ProgramaState extends State<Programa> {
                 ),
               ),
             ],
-            // children: listaEscala.toList(),
           )));
     }
 
     if (louvorSize > 0) {
-      listaPrograma.addAll(_makeAtividade(louvor, grupoAtividade: 'Louvor'));
+      listaPrograma
+          .addAll(_makeAtividade(prgrm.louvor, grupoAtividade: 'Louvor'));
     }
 
     if (esSize > 0) {
-      listaPrograma.addAll(
-          _makeAtividade(escolaSabatina, grupoAtividade: 'Escola Sabatina'));
+      listaPrograma.addAll(_makeAtividade(prgrm.escolaSabatina,
+          grupoAtividade: 'Escola Sabatina'));
     }
 
     if (extraSize > 0) {
-      listaPrograma.addAll(_makeAtividade(extra, grupoAtividade: 'Transição'));
+      listaPrograma
+          .addAll(_makeAtividade(prgrm.extra, grupoAtividade: 'Transição'));
     }
 
     if (cultoSize > 0) {
-      listaPrograma.addAll(_makeAtividade(culto, grupoAtividade: 'Culto'));
+      listaPrograma
+          .addAll(_makeAtividade(prgrm.culto, grupoAtividade: 'Culto'));
     }
     return Column(
       children: listaPrograma,
@@ -255,7 +238,7 @@ class ProgramaState extends State<Programa> {
   }
 
   Widget _buildCard(BuildContext context, document) {
-    IconData _icone = _getIcon(document['icone']);
+    IconData _icone = _getIcon(document.icone);
 
     return Container(
       decoration: BoxDecoration(color: Colors.white),
@@ -264,56 +247,55 @@ class ProgramaState extends State<Programa> {
           new Padding(
             padding: const EdgeInsets.only(left: 45.0),
             child: Container(
-                width: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(4.0, 8.0, 12.0, 8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 3.0),
-                        child: Text(
-                          document['nomeAtividade'],
-                          style: TextStyle(
-                              fontSize: 16.0, fontWeight: FontWeight.w500),
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(4.0, 8.0, 12.0, 8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 3.0),
+                      child: Text(
+                        document.nomeAtividade,
+                        style: TextStyle(
+                            fontSize: 16.0, fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 3.0),
+                          child: Icon(
+                            Icons.schedule,
+                            size: 14.0,
+                          ),
                         ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 8.0, right: 3.0),
-                            child: Icon(
-                              Icons.schedule,
-                              size: 14.0,
-                            ),
+                        Text(
+                          '${document.hInicio} - ${document.duracao} min',
+                          style: TextStyle(fontSize: 14.0),
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(left: 10.0, right: 3.0),
+                          child: Icon(
+                            Icons.person,
+                            size: 14.0,
                           ),
-                          Text(
-                            '${document['hInicio']} - ${document['duracao']} min',
-                            style: TextStyle(fontSize: 14.0),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 10.0, right: 3.0),
-                            child: Icon(
-                              Icons.person,
-                              size: 14.0,
-                            ),
-                          ),
-                          Text(
-                            document['responsavel'],
-                            style: TextStyle(fontSize: 14.0),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                        Text(
+                          document.responsavel,
+                          style: TextStyle(fontSize: 14.0),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
+            ),
           ),
           new Positioned(
             top: 0.0,
@@ -325,7 +307,8 @@ class ProgramaState extends State<Programa> {
               color: Color(0xFFBACEE6),
             ),
           ),
-          new Positioned( //TODO: use checkbox?
+          new Positioned(
+            //TODO: use checkbox?
             top: 15.0,
             left: 10.0,
             child: new Container(
@@ -334,7 +317,7 @@ class ProgramaState extends State<Programa> {
               child: new Icon(_icone, color: Colors.white, size: 30.0),
               decoration: new BoxDecoration(
                 shape: BoxShape.circle,
-                color: Color(0xFFD32F2F),//Color(0xFFA7B9D1), //Theme.of(context).primaryColor,
+                color: Color(0xFFA7B9D1),
               ),
             ),
           )
@@ -343,61 +326,71 @@ class ProgramaState extends State<Programa> {
     );
   }
 
-  // Widget _initAppBar(BuildContext context, {document: null}) {
-  //   if (document == null) {
-  //     return AppBar(
-  //       title: Text(_appBarTitle != null ? _appBarTitle : 'Programa'),
-  //       backgroundColor: _primary, //Colors.green[600],
-  //     );
-  //   }
-  //   return PreferredSize(
-  //     preferredSize: new Size(_size, 20.0),
-  //     child: ListTile(
-  //       dense: true,
-  //       title: Center(
-  //         child: Text(
-  //           document['nomePrograma'].toString().toUpperCase(),
-  //           style: TextStyle(
-  //               fontWeight: FontWeight.bold,
-  //               fontSize: 24.0,
-  //               color: Colors.white),
-  //         ),
-  //       ),
-  //       subtitle: Center(
-  //         child: Text(
-  //           fn.dataCompleta(document['timestamp']),
-  //           style: new TextStyle(fontSize: 16.0, color: Colors.white),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
+    final bloc = Provider.of(context);
     Screen.keepOn(true);
     return new Scaffold(
-      appBar: AppBar(
-        title: new Text('Programa'),
-        backgroundColor: Theme.of(context).primaryColor, //Colors.green[600],
-      ),
-      body: new StreamBuilder(
-        stream: Firestore.instance
-            .collection('programas')
-            .where('publicado', isEqualTo: true)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return LinearProgressIndicator();
-          }
-          return new ListView.builder(
-              itemCount: 1,
-              itemBuilder: (context, index) {
-                return _generateListCards(
-                    context, snapshot.data.documents.first);
-              });
+      resizeToAvoidBottomPadding: true,
+      // appBar: AppBar(
+      //   title: new Text('Programa'),
+      // ),
+      body: NestedScrollView(
+        controller: _scrollViewController,
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              title: Text('Programa'),
+              pinned: false,
+              floating: true,
+              forceElevated: innerBoxIsScrolled,
+            ),
+          ];
         },
+        body: StreamBuilder(
+          stream: bloc.programas,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return LinearProgressIndicator();
+            }
+            return new ListView.builder(
+              padding: EdgeInsets.only(top: 0.0),
+                itemCount: 1,
+                itemBuilder: (context, index) {
+                  return _generateListCards(
+                      context,
+                      new ProgramaModel.fromJson(
+                          snapshot.data.documents.first.data));
+                });
+          },
+        ),
       ),
     );
   }
+  // @override
+  // Widget build(BuildContext context) {
+  //   final bloc = Provider.of(context);
+  //   Screen.keepOn(true);
+  //   return new Scaffold(
+  //     appBar: AppBar(
+  //       title: new Text('Programa'),
+  //     ),
+  //     body: new StreamBuilder(
+  //       stream: bloc.programas,
+  //       builder: (context, snapshot) {
+  //         if (!snapshot.hasData) {
+  //           return LinearProgressIndicator();
+  //         }
+  //         return new ListView.builder(
+  //             itemCount: 1,
+  //             itemBuilder: (context, index) {
+  //               return _generateListCards(
+  //                   context,
+  //                   new ProgramaModel.fromJson(
+  //                       snapshot.data.documents.first.data));
+  //             });
+  //       },
+  //     ),
+  //   );
+  // }
 }

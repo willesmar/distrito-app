@@ -1,29 +1,46 @@
-import 'package:distrito_app/utils/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:html2md/html2md.dart' as html2md;
+
+import 'package:distrito_app/utils/functions.dart';
+import './image_wrapper.dart';
 
 class AnuncioDetalhe extends StatelessWidget {
   AnuncioDetalhe({this.document});
   final document;
   final double _iconSize = 34.0;
   final Color _iconColor = Colors.black;
+  final double _containerListTileHeight = 55.0;
 
   Widget _getDataHora(cron) {
-    return ListTile(
-      contentPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-      leading: Icon(Icons.calendar_today, color: _iconColor, size: _iconSize,),
-      title: Text(dataPorExtensoAbreviada(cron['timestamp'])),
-      subtitle:
-          Text('${diaSemana(cron['timestamp'])} às ${cron['hora'].toString()}'),
+    return Container(
+      height: _containerListTileHeight,
+      child: ListTile(
+        contentPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+        leading: Icon(
+          Icons.calendar_today,
+          color: _iconColor,
+          size: _iconSize,
+        ),
+        title: Text(dataPorExtensoAbreviada(cron['timestamp'])),
+        subtitle: Text(
+            '${diaSemana(cron['timestamp'])} às ${cron['hora'].toString()}'),
+      ),
     );
   }
 
   Widget _getLocal(local) {
-    return ListTile(
-      contentPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-      leading: Icon(Icons.pin_drop, color: _iconColor, size: _iconSize,),
-      title: new Text(local['nome']),
-      subtitle: new Text(local['endereco']),
+    return Container(
+      height: _containerListTileHeight,
+      child: ListTile(
+        contentPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+        leading: Icon(
+          Icons.pin_drop,
+          color: _iconColor,
+          size: _iconSize,
+        ),
+        title: new Text(local['nome']),
+        subtitle: new Text(local['endereco']),
+      ),
     );
   }
 
@@ -36,15 +53,18 @@ class AnuncioDetalhe extends StatelessWidget {
       icone = Icons.mic;
     }
 
-    return ListTile(
-      contentPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-      leading: Icon(
-        icone,
-        color: _iconColor,
-        size: _iconSize,
+    return Container(
+      height: _containerListTileHeight,
+      child: ListTile(
+        contentPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+        leading: Icon(
+          icone,
+          color: _iconColor,
+          size: _iconSize,
+        ),
+        title: new Text(pessoa['nome']),
+        subtitle: new Text(pessoa['predicado']),
       ),
-      title: new Text(pessoa['nome']),
-      subtitle: new Text(pessoa['predicado']),
     );
   }
 
@@ -90,7 +110,10 @@ class AnuncioDetalhe extends StatelessWidget {
       ),
       body: new ListView(
         children: <Widget>[
-          new Image.network(document['imagem']['url'], fit: BoxFit.cover),
+          // new Image.network(document['imagem']['url'], fit: BoxFit.cover),
+          ImageWrapper(
+            imagemUrl: document['imagem']['url'],
+          ),
           new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,

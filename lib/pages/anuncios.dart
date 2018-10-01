@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:html2md/html2md.dart' as html2md;
+import 'package:cached_network_image/cached_network_image.dart';
 import '../utils/functions.dart' as fn;
 import './anuncio_detalhe.dart';
+import '../utils/bloc.dart';
 
 class Anuncios extends StatefulWidget {
   @override
@@ -45,7 +47,18 @@ class AnunciosState extends State<Anuncios> {
                   height: 200.0,
                 ),
                 child: new Stack(fit: StackFit.expand, children: <Widget>[
-                  new Image.network(imgUrl, fit: BoxFit.cover),
+                  // new Image.network(imgUrl, fit: BoxFit.cover),
+                  // FadeInImage.assetNetwork(
+                  //     placeholder: 'assets/images/placeholder-image.png',
+                  //     image: imgUrl,
+                  //     fit: BoxFit.cover,
+                  //   ),
+                  new CachedNetworkImage(
+                      imageUrl: imgUrl,
+                      placeholder: Image.asset('assets/images/placeholder-image.png'),
+                      fit: BoxFit.cover,
+                      errorWidget: new Icon(Icons.error),
+                    ),
                   new Positioned(
                     left: 0.0,
                     right: 0.0,
@@ -132,6 +145,7 @@ class AnunciosState extends State<Anuncios> {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = Provider.of(context);
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('Comunicação'),
@@ -140,10 +154,11 @@ class AnunciosState extends State<Anuncios> {
       body: Padding(
         padding: const EdgeInsets.fromLTRB(6.0, 3.0, 6.0, 3.0),
         child: new StreamBuilder(
-          stream: Firestore.instance
-              .collection('anuncios')
-              .where('publicado', isEqualTo: true)
-              .snapshots(),
+          // stream: Firestore.instance
+          //     .collection('anuncios')
+          //     .where('publicado', isEqualTo: true)
+          //     .snapshots(),
+          stream: bloc.anuncios,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return LinearProgressIndicator();

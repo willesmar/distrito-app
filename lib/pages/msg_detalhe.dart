@@ -1,32 +1,23 @@
+import 'package:distrito_app/model/mensagem/mensagem.dart';
 import 'package:flutter/material.dart';
-import 'package:distrito_app/model/mensagem/autor.dart';
 import 'package:html2md/html2md.dart' as html2md;
+
 import '../utils/functions.dart' as fn;
+import 'package:distrito_app/model/mensagem/autor.dart';
 import 'package:distrito_app/model/imagem.dart';
+import './image_wrapper.dart';
 
 class MensagemDetalhe extends StatelessWidget {
-  MensagemDetalhe({this.document});
-  final document;
+  MensagemDetalhe({this.msg});
+  final Mensagem msg;
   @override
   Widget build(BuildContext context) {
-    String mensagem = document['msg'].toString();
+    String mensagem = msg.msg.toString();
     String markdown = html2md.convert(mensagem);
-    Imagem imagem = new Imagem(
-        createdAt: '${document['imagem']['createdAt']}',
-        nameFile: '${document['imagem']['nameFile']}',
-        url: '${document['imagem']['url']}');
-    Imagem autorImagem = new Imagem(
-        createdAt: '${document['autor']['foto']['createdAt']}',
-        nameFile: '${document['autor']['foto']['nameFile']}',
-        url: '${document['autor']['foto']['url']}');
-    Autor autor = new Autor(
-        nome: '${document['autor']['nome']}',
-        foto: autorImagem,
-        predicado: '${document['autor']['predicado']}');
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(document['titulo']),
+        title: Text(msg.titulo),
       ),
       body: new ListView(
         children: <Widget>[
@@ -34,11 +25,11 @@ class MensagemDetalhe extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              new ShowImage(imagem: imagem),
-              new ShowPassagem(document: document),
-              new ShowDate(document: document),
+              new ShowImage(imagem: msg.imagem),
+              new ShowPassagem(passagem: msg.passagem),
+              new ShowDate(timestamp: msg.timestamp),
               new ShowMensagem(markdown: markdown),
-              new ShowAutor(autor: autor),
+              new ShowAutor(autor: msg.autor),
             ],
           ),
         ],
@@ -86,19 +77,18 @@ class ShowAutor extends StatelessWidget {
 }
 
 class ShowMensagem extends StatelessWidget {
+  final String markdown;
   const ShowMensagem({
     Key key,
     @required this.markdown,
-  }) : super(key: key);
-
-  final String markdown;
+  });
 
   @override
   Widget build(BuildContext context) {
-    return new Padding(
+    return Padding(
       padding: const EdgeInsets.all(12.0),
       child: new Text(
-        markdown,
+        this.markdown,
         textAlign: TextAlign.justify,
         style: new TextStyle(fontSize: 16.0),
       ),
@@ -109,10 +99,10 @@ class ShowMensagem extends StatelessWidget {
 class ShowDate extends StatelessWidget {
   const ShowDate({
     Key key,
-    @required this.document,
+    @required this.timestamp,
   }) : super(key: key);
 
-  final document;
+  final int timestamp;
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +120,7 @@ class ShowDate extends StatelessWidget {
             ),
           ),
           new Text(
-            fn.dataPorExtenso(document['timestamp']),
+            fn.dataPorExtenso(timestamp),
             style: new TextStyle(fontSize: 16.0),
           ),
         ],
@@ -142,17 +132,17 @@ class ShowDate extends StatelessWidget {
 class ShowPassagem extends StatelessWidget {
   const ShowPassagem({
     Key key,
-    @required this.document,
+    @required this.passagem,
   }) : super(key: key);
 
-  final document;
+  final String passagem;
 
   @override
   Widget build(BuildContext context) {
     return new Padding(
       padding: const EdgeInsets.all(12.0),
       child: new Text(
-        document['passagem'],
+        passagem,
         textAlign: TextAlign.justify,
         style: new TextStyle(fontSize: 18.0, fontStyle: FontStyle.italic),
       ),
@@ -170,6 +160,25 @@ class ShowImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Image.network(imagem.url, fit: BoxFit.cover);
+    // return new Image.network(imagem.url, fit: BoxFit.cover);
+    // return GestureDetector(
+    //   onTap: () {
+    //     Navigator.of(context).push(MaterialPageRoute<Null>(
+    //       builder: (BuildContext context) {
+    //         return ImageFullScreen(imagemUrl: imagem.url);
+    //       },
+    //       fullscreenDialog: true,
+    //     ));
+    //   },
+    //   child: CachedNetworkImage(
+    //     imageUrl: imagem.url,
+    //     placeholder: Image.asset('assets/images/placeholder-image.png'),
+    //     fit: BoxFit.cover,
+    //     errorWidget: new Icon(Icons.error),
+    //   ),
+    // );
+    return ImageWrapper(
+      imagemUrl: imagem.url,
+    );
   }
 }
