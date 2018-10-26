@@ -30,7 +30,7 @@ class ImageWrapper extends StatelessWidget {
         ));
       },
       child: SafeArea(
-              child: CachedNetworkImage(
+        child: CachedNetworkImage(
           imageUrl: imagemUrl,
           placeholder: Image.asset(placeholderImgUrl),
           fit: boxFit,

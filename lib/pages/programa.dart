@@ -53,7 +53,7 @@ class ProgramaState extends State<Programa> {
       listaRetornada.add(Container(
           decoration: BoxDecoration(color: topColor),
           child: ExpansionTile(
-            initiallyExpanded: true,
+            initiallyExpanded: false,
             backgroundColor: topColor,
             title: Text(
               grupoAtividade.toString(),
@@ -166,6 +166,7 @@ class ProgramaState extends State<Programa> {
       listaPrograma.add(Container(
           decoration: BoxDecoration(color: topColor),
           child: ExpansionTile(
+            initiallyExpanded: false,
             backgroundColor: topColor,
             title: Text(
               'Escalas',
@@ -326,71 +327,72 @@ class ProgramaState extends State<Programa> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final bloc = Provider.of(context);
-    Screen.keepOn(true);
-    return new Scaffold(
-      resizeToAvoidBottomPadding: true,
-      // appBar: AppBar(
-      //   title: new Text('Programa'),
-      // ),
-      body: NestedScrollView(
-        controller: _scrollViewController,
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-              title: Text('Programa'),
-              pinned: false,
-              floating: true,
-              forceElevated: innerBoxIsScrolled,
-            ),
-          ];
-        },
-        body: StreamBuilder(
-          stream: bloc.programas,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return LinearProgressIndicator();
-            }
-            return new ListView.builder(
-              padding: EdgeInsets.only(top: 0.0),
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  return _generateListCards(
-                      context,
-                      new ProgramaModel.fromJson(
-                          snapshot.data.documents.first.data));
-                });
-          },
-        ),
-      ),
-    );
-  }
   // @override
   // Widget build(BuildContext context) {
   //   final bloc = Provider.of(context);
   //   Screen.keepOn(true);
   //   return new Scaffold(
-  //     appBar: AppBar(
-  //       title: new Text('Programa'),
-  //     ),
-  //     body: new StreamBuilder(
-  //       stream: bloc.programas,
-  //       builder: (context, snapshot) {
-  //         if (!snapshot.hasData) {
-  //           return LinearProgressIndicator();
-  //         }
-  //         return new ListView.builder(
-  //             itemCount: 1,
-  //             itemBuilder: (context, index) {
-  //               return _generateListCards(
-  //                   context,
-  //                   new ProgramaModel.fromJson(
-  //                       snapshot.data.documents.first.data));
-  //             });
+  //     resizeToAvoidBottomPadding: true,
+  //     // appBar: AppBar(
+  //     //   title: new Text('Programa'),
+  //     // ),
+  //     body: NestedScrollView(
+  //       controller: _scrollViewController,
+  //       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+  //         return <Widget>[
+  //           SliverAppBar(
+  //             title: Text('Programa'),
+  //             pinned: false,
+  //             floating: true,
+  //             forceElevated: true,
+  //           ),
+  //         ];
   //       },
+  //       body: StreamBuilder(
+  //         stream: bloc.programas,
+  //         builder: (context, snapshot) {
+  //           if (!snapshot.hasData) {
+  //             return LinearProgressIndicator();
+  //           }
+  //           return new ListView.builder(
+  //             padding: EdgeInsets.only(top: 0.0),
+  //               itemCount: 1,
+  //               itemBuilder: (context, index) {
+  //                 return _generateListCards(
+  //                     context,
+  //                     new ProgramaModel.fromJson(
+  //                         snapshot.data.documents.first.data));
+  //               });
+  //         },
+  //       ),
   //     ),
   //   );
   // }
+  @override
+  Widget build(BuildContext context) {
+    final bloc = Provider.of(context);
+    Screen.keepOn(true);
+    return Scaffold(
+      resizeToAvoidBottomPadding: false,
+      appBar: AppBar(
+        title: new Text('Programa'),
+      ),
+      body: new StreamBuilder(
+        stream: bloc.programas,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return LinearProgressIndicator();
+          }
+          return new ListView.builder(
+              itemCount: 1,
+              itemBuilder: (context, index) {
+                return _generateListCards(
+                    context,
+                    new ProgramaModel.fromJson(
+                        snapshot.data.documents.first.data));
+              });
+        },
+      ),
+    );
+  }
 }

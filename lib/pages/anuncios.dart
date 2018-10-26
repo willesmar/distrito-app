@@ -55,7 +55,7 @@ class AnunciosState extends State<Anuncios> {
                   //   ),
                   new CachedNetworkImage(
                       imageUrl: imgUrl,
-                      placeholder: Image.asset('assets/images/placeholder-image.png'),
+                      placeholder: Image.asset('assets/images/placeholder-image.png', fit: BoxFit.cover,),
                       fit: BoxFit.cover,
                       errorWidget: new Icon(Icons.error),
                     ),
@@ -147,6 +147,7 @@ class AnunciosState extends State<Anuncios> {
   Widget build(BuildContext context) {
     final bloc = Provider.of(context);
     return new Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: new AppBar(
         title: new Text('Comunicação'),
         backgroundColor: Theme.of(context).primaryColor, //Colors.green[600],

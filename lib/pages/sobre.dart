@@ -29,7 +29,7 @@ class Contato {
 
 class Sobre extends StatelessWidget {
 
-  final Color _cardHeaderColor = Color(0xFF3E8391);
+  final Color _cardHeaderColor = Color(0xFF2F557F);
 
   _launchMAPS(String lat, String long) async {
     String appleUrl = 'http://maps.apple.com/?ll=${lat},${long}';
@@ -113,7 +113,7 @@ class Sobre extends StatelessWidget {
           // new Image.network(fachada.url, fit: BoxFit.cover),
           new CachedNetworkImage(
             imageUrl: fachada.url,
-            placeholder: Image.asset('assets/images/placeholder-image.png'),
+            placeholder: Image.asset('assets/images/placeholder-image.png', fit: BoxFit.cover,),
             fit: BoxFit.cover,
             errorWidget: new Icon(Icons.error),
           ),
@@ -203,7 +203,7 @@ class Sobre extends StatelessWidget {
                     CachedNetworkImage(
                   imageUrl: sobreObj['endereco']['mapa']['url'],
                   placeholder:
-                      Image.asset('assets/images/placeholder-image.png'),
+                      Image.asset('assets/images/placeholder-image.png', fit: BoxFit.cover,),
                   fit: BoxFit.cover,
                   errorWidget: new Icon(Icons.error),
                 ),
@@ -425,6 +425,7 @@ class Sobre extends StatelessWidget {
     final bloc = Provider.of(context);
 
     return new Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: new AppBar(
         title: new Text('Sobre'),
         backgroundColor: Theme.of(context).primaryColor,

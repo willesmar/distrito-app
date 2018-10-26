@@ -105,6 +105,7 @@ class AnuncioDetalhe extends StatelessWidget {
     String descricaoMarkdown = html2md.convert(descricao);
 
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text(document['nome']),
       ),

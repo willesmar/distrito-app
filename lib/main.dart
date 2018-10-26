@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 // import './utils/bloc.dart';
@@ -18,7 +19,8 @@ import 'package:distrito_app/pages/splashscreen.dart';
 
 void main() {
   // final bloc = Bloc();
-
+  // debugPaintSizeEnabled = true;
+  // debugPaintPointersEnabled = true;
   SystemChrome.setEnabledSystemUIOverlays([]);
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
@@ -48,14 +50,15 @@ class DistritoApp extends StatelessWidget {
     //   // return hasIgreja;
     // });
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: Color(0xFF003366), //Colors.lightBlueAccent[700],
-          backgroundColor: Color(0xFFF3FDFE),
-          bottomAppBarColor: Color(0xFF003366),
-        ),
-        home: SplashScreen(),
-        // child: MyTabs(),
+      debugShowCheckedModeBanner: false,
+      // debugShowMaterialGrid: true,
+      theme: ThemeData(
+        primaryColor: Color(0xFF003366), //Colors.lightBlueAccent[700],
+        backgroundColor: Color(0xFFF3FDFE),
+        bottomAppBarColor: Color(0xFF003366),
+      ),
+      home: SplashScreen(),
+      // child: MyTabs(),
     );
   }
 }

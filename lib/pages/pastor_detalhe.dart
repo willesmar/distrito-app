@@ -17,6 +17,7 @@ class PastorDetalhe extends StatelessWidget {
     String markdown = html2md.convert(biografia);
 
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text('Nosso Pastor'),
       ),

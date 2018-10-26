@@ -91,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen> {
   );
 
   final Widget description = Text(
-    'Escolha sua igreja.',
+    'Escolha sua igreja',
     textAlign: TextAlign.center,
     style: textStyle.copyWith(fontSize: 24.0, color: Color(0xFF003366)),
   );
@@ -129,6 +129,10 @@ class _SplashScreenState extends State<SplashScreen> {
       isEmpty: _currentIgreja == '',
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
+          hint: Padding(
+            padding: const EdgeInsets.only(left: 18.0),
+            child: description,
+          ), //Text('Escolha sua igreja'),
           value: _currentIgreja,
           isDense: true,
           onChanged: (String igreja) {
@@ -165,6 +169,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
@@ -184,15 +189,15 @@ class _SplashScreenState extends State<SplashScreen> {
                   Container(
                     child: Column(
                       children: <Widget>[
-                        description,
+                        // description,
                         SizedBox(
                           height: 15.0,
                         ),
                         // dropdownButton(),
                         dropdownInput(context),
-                        SizedBox(
-                          height: 15.0,
-                        ),
+                        // SizedBox(
+                        //   height: 15.0,
+                        // ),
                         // button('Entrar', () {
                         //   print('<<<<<< entrar btn >>>>>');
                         //   if (_currentIgreja.isNotEmpty) {

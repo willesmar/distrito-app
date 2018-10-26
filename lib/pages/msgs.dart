@@ -233,6 +233,7 @@ class Mensagens extends StatelessWidget {
       print('Igreja => $hasIgreja');
     });
     return new Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: new AppBar(
         title: new Text('Mensagens'),
         backgroundColor: Theme.of(context).primaryColor,
@@ -247,7 +248,7 @@ class Mensagens extends StatelessWidget {
           stream: bloc.mensagens,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return CircularProgressIndicator();
+              return LinearProgressIndicator();
             }
             // snapshot.data.documents.forEach((doc) {
             //   // print(doc.data);

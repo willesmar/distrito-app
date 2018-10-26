@@ -16,6 +16,7 @@ class MensagemDetalhe extends StatelessWidget {
     String markdown = html2md.convert(mensagem);
 
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text(msg.titulo),
       ),

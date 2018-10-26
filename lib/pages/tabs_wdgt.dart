@@ -1,3 +1,4 @@
+import 'package:distrito_app/model/push_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:distrito_app/utils/custom_icons_icons.dart';
@@ -36,20 +37,6 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
     super.initState();
     debugPrint(widget.igreja);
     controller = new TabController(vsync: this, length: 4);
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
-        // _showItemDialog(message);
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
-        // _navigateToItemDetail(message);
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
-        // _navigateToItemDetail(message);
-      },
-    );
     _firebaseMessaging.requestNotificationPermissions(
         const IosNotificationSettings(sound: true, badge: true, alert: true));
     _firebaseMessaging.onIosSettingsRegistered
@@ -63,7 +50,6 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
       });
       print(_homeScreenText);
     });
-
   }
 
   @override
@@ -81,6 +67,39 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
     //     await selecionarIgrejaModal(context);
     //   }
     // });
+    // onMessage: {
+    //   notification: {
+    //     title: Titulo 3 teste,
+    //     body: Mensagem de teste distrito app
+    //     },
+    //   data: {
+    //     key: value,
+    //     canal: comunicacao
+    //   }
+    // }
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        PushNotification pushMessage = PushNotification.fromJson(message);
+        // print("onMessage: $message");
+        // _showItemDialog(message);
+        showPushNotification(context, pushMessage);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        // print("onLaunch: $message");
+        // _navigateToItemDetail(message);
+        PushNotification pushMessage = PushNotification.fromJson(message);
+        showPushNotification(context, pushMessage);
+        // controller.animateTo(2);
+      },
+      onResume: (Map<String, dynamic> message) async {
+        // print("onResume: $message");
+        PushNotification pushMessage = PushNotification.fromJson(message);
+        showPushNotification(context, pushMessage);
+        // controller.animateTo(3);
+        // _navigateToItemDetail(message);
+      },
+    );
+
     if (widget.igreja.isEmpty) {
       selecionarIgrejaModal(context);
     } else if (widget.igreja.isNotEmpty) {
@@ -92,6 +111,7 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
 
     return Provider(
       child: Scaffold(
+        resizeToAvoidBottomPadding: false,
         bottomNavigationBar: new Material(
           color: Theme.of(context).primaryColor, //Colors.green[900],
           child: new TabBar(
@@ -138,6 +158,33 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
           ],
         ),
       ),
+    );
+  }
+
+  void showPushNotification(BuildContext context, PushNotification pushMessage) {
+    showDialog<Null>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(pushMessage.title),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(pushMessage.body),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+          FlatButton(
+              child: Text('Fechar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
