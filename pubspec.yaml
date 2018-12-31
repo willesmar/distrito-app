@@ -10,7 +10,7 @@ dependencies:
   html2md: "^0.2.1"
   flutter_markdown:
     git: https://github.com/KevinTheGray/flutter_markdown
-  shared_preferences: "^0.4.2"
+  shared_preferences: "^0.4.3"
   screen: "^0.0.4"
   url_launcher: ^3.0.3
   rxdart: ^0.18.1

@@ -1,5 +1,8 @@
 import 'package:distrito_app/model/atividade.dart';
 import 'package:distrito_app/model/programa.dart';
+import 'package:distrito_app/pages/notify_button_wdg.dart';
+import 'package:distrito_app/utils/bloc_provider.dart';
+import 'package:distrito_app/utils/programa_notification_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:screen/screen.dart';
@@ -370,12 +373,38 @@ class ProgramaState extends State<Programa> {
   // }
   @override
   Widget build(BuildContext context) {
+    // bool _notify = false;
     final bloc = Provider.of(context);
     Screen.keepOn(true);
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: new Text('Programa'),
+        actions: <Widget>[
+          BlocProvider<ProgramaNotificationBloc>(
+            bloc: ProgramaNotificationBloc(),
+            child: NotificarButtonWidget(),
+          ),
+          // StreamBuilder<bool>(
+          //   stream: bloc.notificacaoPrgrm,
+          //   initialData: false,
+          //   builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          //     if (snapshot.hasData) {
+          //       _notify = snapshot?.data;
+          //       return IconButton(
+          //         icon: snapshot?.data == true
+          //             ? Icon(Icons.notifications_active)
+          //             : Icon(Icons.notifications_none),
+          //         onPressed: () {
+          //           _notify = !_notify;
+          //           bloc.notificarPrgrm(_notify);
+          //         },
+          //       );
+          //     }
+          //     return Container();
+          //   },
+          // ),
+        ],
       ),
       body: new StreamBuilder(
         stream: bloc.programas,

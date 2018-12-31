@@ -8,13 +8,16 @@ class Bloc {
   // extends Object with ValidatorsExample
   // final _mensagemController = StreamController<dynamic>.broadcast();
   final _igrejaCtrl = BehaviorSubject<String>();
+  // final _notificarProgramaCtrl = BehaviorSubject<bool>();
 
   // Add data to Stream
   // _mensagemController.stream.transform(validateEmail)
   Stream<String> get igreja => _igrejaCtrl.stream;
+  // Stream<bool> get notificacaoPrgrm => _notificarProgramaCtrl.stream;
 
   // Change Stream data
   Function(String) get selecionarIgreja => _igrejaCtrl.sink.add;
+  // Function(bool) get notificarPrgrm => _notificarProgramaCtrl.sink.add;
 
   Stream<QuerySnapshot> get mensagens => Firestore.instance
       .collection('distrito')
@@ -45,6 +48,8 @@ class Bloc {
 
   Bloc() {
     selecionarIgreja('');
+    // notificacaoPrgrm.listen(onData) XXX: put on shared_preferences
+    // notificarPrgrm(true);
   }
 
   submit() {
@@ -53,6 +58,7 @@ class Bloc {
 
   dispose() {
     _igrejaCtrl.close();
+    // _notificarProgramaCtrl.close();
   }
 }
 

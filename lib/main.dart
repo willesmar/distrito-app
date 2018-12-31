@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -21,6 +22,19 @@ void main() {
   // final bloc = Bloc();
   // debugPaintSizeEnabled = true;
   // debugPaintPointersEnabled = true;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final List<String> listaIgrejas = [
+    'jacy',
+    'oliveira3',
+    'piratininga',
+    'caicara',
+    'uniao',
+    'aquarios',
+    'nacoes',
+  ];
+  listaIgrejas.forEach((i) {
+    _firebaseMessaging.unsubscribeFromTopic(i);
+  });
   SystemChrome.setEnabledSystemUIOverlays([]);
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {

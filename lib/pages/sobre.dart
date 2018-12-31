@@ -37,17 +37,17 @@ class Sobre extends StatelessWidget {
         'https://www.google.com/maps/dir/?api=1&destination=${lat},${long}';
     String wazeUrl = 'https://waze.com/ul?ll=${lat},${long}&navigate=yes';
     if (Platform.isAndroid && await canLaunch(googleUrl)) {
-      print('launching com googleUrl'); // XXX:
+      // print('launching com googleUrl'); // XXX:
       await launch(googleUrl);
     } else if (Platform.isIOS && await canLaunch(appleUrl)) {
-      print('launching apple url'); // XXX:
+      // print('launching apple url'); // XXX:
       await launch(appleUrl);
     } else if (await canLaunch(wazeUrl)) {
-      print('launching waze url'); // XXX:
+      // print('launching waze url'); // XXX:
       await launch(wazeUrl);
     } else {
-      print(lat); // XXX:
-      print(long); // XXX:
+      // print(lat); // XXX:
+      // print(long); // XXX:
       print('Could not launch url');
     }
   }

@@ -49,7 +49,9 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
         _homeScreenText = "Push Messaging token: $token";
       });
       print(_homeScreenText);
+      // unsubscribeAllTopics();
     });
+    _firebaseMessaging.subscribeToTopic(widget.igreja);
   }
 
   @override
@@ -161,7 +163,8 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
     );
   }
 
-  void showPushNotification(BuildContext context, PushNotification pushMessage) {
+  void showPushNotification(
+      BuildContext context, PushNotification pushMessage) {
     showDialog<Null>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -176,7 +179,7 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
             ),
           ),
           actions: <Widget>[
-          FlatButton(
+            FlatButton(
               child: Text('Fechar'),
               onPressed: () {
                 Navigator.of(context).pop();
