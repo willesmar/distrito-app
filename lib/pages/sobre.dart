@@ -58,29 +58,38 @@ class Sobre extends StatelessWidget {
       case 'phone':
         iconeDinamico = Icons.phone;
         break;
-      case 'mail':
+      case 'sitemap':
+        iconeDinamico = Icons.error;
+        break;
+      case 'envelope':
         iconeDinamico = Icons.mail_outline;
         break;
-      case 'facebook':
-        iconeDinamico = CustomIcons.facebook_official;
-        break;
-      case 'instagram':
-        iconeDinamico = CustomIcons.instagram;
-        break;
-      case 'youtube':
-        iconeDinamico = CustomIcons.youtube_squared;
+      case 'blog':
+        iconeDinamico = Icons.error;
         break;
       case 'whatsapp':
         iconeDinamico = CustomIcons.whatsapp;
         break;
+      case 'instagram':
+        iconeDinamico = CustomIcons.instagram;
+        break;
       case 'twitter':
         iconeDinamico = CustomIcons.twitter_squared;
+        break;
+      case 'facebook':
+        iconeDinamico = CustomIcons.facebook_official;
+        break;
+      case 'youtube':
+        iconeDinamico = CustomIcons.youtube_squared;
         break;
       case 'spotify':
         iconeDinamico = CustomIcons.spotify;
         break;
+      case 'pinterest':
+        iconeDinamico = Icons.error;
+        break;
       default:
-        iconeDinamico = Icons.face;
+        iconeDinamico = Icons.error;
     }
     return iconeDinamico;
   }
