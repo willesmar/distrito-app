@@ -101,7 +101,7 @@ _nomeMesesAbreviado(num m) {
 }
 
 _nomeDiaSemana(num m) {
-  switch (m) {
+  switch (m+1) {
     case 1:
       return 'Domingo';
       break;
