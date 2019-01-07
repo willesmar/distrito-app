@@ -22,7 +22,7 @@ class Atividade {
       duracao: json['duracao'],
       hFim: json['hFim'],
       hInicio:  json['hInicio'],
-      icone: json['icone'],
+      icone: json['icone']['valor'],
       nomeAtividade:  json['nomeAtividade'],
       responsavel:  json['responsavel'],
     );
