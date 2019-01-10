@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:distrito_app/model/atividade.dart';
 import 'package:distrito_app/model/programa.dart';
 import 'package:distrito_app/pages/notify_button_wdg.dart';
@@ -108,28 +109,32 @@ class ProgramaState extends State<Programa> {
         ministerio = 'Ministério';
     }
     integrantes.forEach((integrante) {
-      listaEscala.add(Chip(
-        label: Text(
-          integrante,
-          style: TextStyle(fontWeight: FontWeight.w600),
+      listaEscala.add(Material(
+              child: Chip(
+          label: Text(
+            integrante,
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+          backgroundColor: Color(0xFF3E8391).withOpacity(0.3),
         ),
-        backgroundColor: Color(0xFF3E8391).withOpacity(0.3),
       ));
     });
-    return ListTile(
-      title: Padding(
-        padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
-        child: Text(ministerio),
-      ),
-      subtitle: Wrap(
-        spacing: 8.0, // gap between adjacent chips
-        runSpacing: 4.0, // gap between lines
-        children: listaEscala.toList(),
+    return Material(
+          child: ListTile(
+        title: Padding(
+          padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+          child: Text(ministerio),
+        ),
+        subtitle: Wrap(
+          spacing: 8.0, // gap between adjacent chips
+          runSpacing: 4.0, // gap between lines
+          children: listaEscala.toList(),
+        ),
       ),
     );
   }
 
-  Widget _generateListCards(BuildContext context, ProgramaModel prgrm) {
+  Widget _generateListCards(BuildContext context, ProgramaModel prgrm, {isIOS: false}) {
     List<Widget> listaPrograma = [];
     Map<dynamic, dynamic> escala = prgrm.equipes;
     num louvorSize = prgrm.louvor.length;
@@ -139,26 +144,28 @@ class ProgramaState extends State<Programa> {
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     listaPrograma.add(
-      Container(
-        decoration: BoxDecoration(color: isIOS ? Colors.grey[200] : topColor),
-        padding: EdgeInsets.only(top: 8.0),
-        child: ListTile(
-          dense: true,
-          title: Center(
-            child: Text(
-              prgrm.nomePrograma.toString().toUpperCase(),
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24.0,
-                  color: isIOS ? Colors.grey[900] : Colors.white),
+      Material(
+              child: Container(
+          decoration: BoxDecoration(color: isIOS ? Colors.grey[200] : topColor),
+          padding: EdgeInsets.only(top: 8.0),
+          child: ListTile(
+            dense: true,
+            title: Center(
+              child: Text(
+                prgrm.nomePrograma.toString().toUpperCase(),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24.0,
+                    color: isIOS ? Colors.grey[900] : Colors.white),
+              ),
             ),
-          ),
-          subtitle: Center(
-            child: Text(
-              fn.dataCompleta(prgrm.timestamp),
-              style: new TextStyle(
-                  fontSize: 16.0,
-                  color: isIOS ? Colors.grey[900] : Colors.white),
+            subtitle: Center(
+              child: Text(
+                fn.dataCompleta(prgrm.timestamp),
+                style: new TextStyle(
+                    fontSize: 16.0,
+                    color: isIOS ? Colors.grey[900] : Colors.white),
+              ),
             ),
           ),
         ),
@@ -171,30 +178,32 @@ class ProgramaState extends State<Programa> {
         List<String> integrantes = escala[key].cast<String>();
         listaEscala.add(makeEscala(key, integrantes));
       });
-      listaPrograma.add(Container(
-          decoration: BoxDecoration(color: isIOS ? Colors.grey[200] : topColor),
-          child: ExpansionTile(
-            initiallyExpanded: false,
-            backgroundColor: isIOS ? Colors.grey[100] : topColor,
-            title: Text(
-              'Escalas',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.0,
-                  color: isIOS ? Colors.grey[900] : Colors.white),
-            ),
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.all(0.0),
-                decoration: BoxDecoration(color: Color(0xFFFFFFFF)),
-                child: Wrap(
-                  spacing: 8.0, // gap between adjacent chips
-                  runSpacing: 4.0, // gap between lines
-                  children: listaEscala.toList(),
-                ),
+      listaPrograma.add(Material(
+              child: Container(
+            decoration: BoxDecoration(color: isIOS ? Colors.grey[200] : topColor),
+            child: ExpansionTile(
+              initiallyExpanded: false,
+              backgroundColor: isIOS ? Colors.grey[100] : topColor,
+              title: Text(
+                'Escalas',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                    color: isIOS ? Colors.grey[900] : Colors.white),
               ),
-            ],
-          )));
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(0.0),
+                  decoration: BoxDecoration(color: Color(0xFFFFFFFF)),
+                  child: Wrap(
+                    spacing: 8.0, // gap between adjacent chips
+                    runSpacing: 4.0, // gap between lines
+                    children: listaEscala.toList(),
+                  ),
+                ),
+              ],
+            )),
+      ));
     }
 
     if (louvorSize > 0) {
@@ -216,8 +225,10 @@ class ProgramaState extends State<Programa> {
       listaPrograma
           .addAll(_makeAtividade(prgrm.culto, grupoAtividade: 'Culto'));
     }
-    return Column(
-      children: listaPrograma,
+    return Material(
+          child: Column(
+        children: listaPrograma,
+      ),
     );
   }
 
@@ -524,82 +535,69 @@ class ProgramaState extends State<Programa> {
     return Container();
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   final bloc = Provider.of(context);
-  //   Screen.keepOn(true);
-  //   return new Scaffold(
-  //     resizeToAvoidBottomPadding: true,
-  //     // appBar: AppBar(
-  //     //   title: new Text('Programa'),
-  //     // ),
-  //     body: NestedScrollView(
-  //       controller: _scrollViewController,
-  //       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-  //         return <Widget>[
-  //           SliverAppBar(
-  //             title: Text('Programa'),
-  //             pinned: false,
-  //             floating: true,
-  //             forceElevated: true,
-  //           ),
-  //         ];
-  //       },
-  //       body: StreamBuilder(
-  //         stream: bloc.programas,
-  //         builder: (context, snapshot) {
-  //           if (!snapshot.hasData) {
-  //             return LinearProgressIndicator();
-  //           }
-  //           return new ListView.builder(
-  //             padding: EdgeInsets.only(top: 0.0),
-  //               itemCount: 1,
-  //               itemBuilder: (context, index) {
-  //                 return _generateListCards(
-  //                     context,
-  //                     new ProgramaModel.fromJson(
-  //                         snapshot.data.documents.first.data));
-  //               });
-  //         },
-  //       ),
-  //     ),
-  //   );
-  // }
-  @override
-  Widget build(BuildContext context) {
-    // bool _notify = false;
-    final bloc = Provider.of(context);
-    Screen.keepOn(true);
+  StreamBuilder<QuerySnapshot> _programaPageListItens(Bloc bloc, {isIOS: false}) {
+    return StreamBuilder(
+      stream: bloc.programas,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return LinearProgressIndicator();
+        }
+        return ListView.builder(
+            itemCount: 1,
+            itemBuilder: (context, index) {
+              return _generateListCards(
+                  context,
+                  ProgramaModel.fromJson(
+                      snapshot.data.documents.first.data), isIOS: isIOS);
+            });
+      },
+    );
+  }
+
+  BlocProvider<ProgramaNotificationBloc> _makeProgramaNotificationSubs() {
+    return BlocProvider<ProgramaNotificationBloc>(
+      bloc: ProgramaNotificationBloc(),
+      child: Material(
+              child: Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: NotificarButtonWidget(),
+        ),
+      ),
+    );
+  }
+
+  CupertinoPageScaffold _iosProgramaPage(BuildContext context, Bloc bloc) {
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text('Programação'),
+        trailing: _makeProgramaNotificationSubs(),
+      ),
+      child: _programaPageListItens(bloc, isIOS: true), // isIOS: true),
+    );
+  }
+
+  Scaffold _androidProgramaPage(BuildContext context, Bloc bloc) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppTabBar(
           title: Text('Programação'),
           context: context,
           actions: <Widget>[
-            BlocProvider<ProgramaNotificationBloc>(
-              bloc: ProgramaNotificationBloc(),
-              child: Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: NotificarButtonWidget(),
-              ),
-            ),
+            _makeProgramaNotificationSubs(),
           ]),
-      body: new StreamBuilder(
-        stream: bloc.programas,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return LinearProgressIndicator();
-          }
-          return new ListView.builder(
-              itemCount: 1,
-              itemBuilder: (context, index) {
-                return _generateListCards(
-                    context,
-                    new ProgramaModel.fromJson(
-                        snapshot.data.documents.first.data));
-              });
-        },
-      ),
+      body: _programaPageListItens(bloc),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    final bloc = Provider.of(context);
+    Screen.keepOn(true);
+    if (isIOS) {
+      return _iosProgramaPage(context, bloc);
+    } else {
+      return _androidProgramaPage(context, bloc);
+    }
   }
 }

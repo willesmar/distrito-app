@@ -82,13 +82,24 @@ class DistritoApp extends StatelessWidget {
     //   print('Igreja => $hasIgreja');
     //   // return hasIgreja;
     // });
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      // debugShowMaterialGrid: true,
-      theme: isIOS ? kIOSTheme : kDefaultTheme,
-      home: SplashScreen(),
-      // child: MyTabs(),
-    );
+    if (isIOS) {
+      return CupertinoApp(
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          DefaultMaterialLocalizations.delegate,
+          DefaultWidgetsLocalizations.delegate,
+        ],
+        home: SplashScreen(),
+      );
+    } else {
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        // debugShowMaterialGrid: true,
+        theme: isIOS ? kIOSTheme : kDefaultTheme,
+        home: SplashScreen(),
+        // child: MyTabs(),
+      );
+    }
   }
 }
 

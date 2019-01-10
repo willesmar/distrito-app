@@ -1,11 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'dart:async';
+
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:distrito_app/model/mensagem/mensagem.dart';
 import 'package:distrito_app/widgets/app_tabbar.dart';
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import '../utils/functions.dart' as fn;
 import '../utils/globals.dart' as globals;
 import './msg_detalhe.dart';
 import '../utils/bloc.dart';
@@ -110,12 +110,8 @@ class Mensagens extends StatelessWidget {
         });
   }
 
-  _buildListItem(BuildContext context, Mensagem msg) {
-    // final img = msg['imagem'];
-    // final imgUrl = img['url'];
-    // Mensagem msg = new Mensagem.fromJson(document.data);
-    // print('Título >>>>> ${msg.titulo}');
-    return new GestureDetector(
+  Widget _buildListItem(BuildContext context, Mensagem msg, {isIOS: false}) {
+    return GestureDetector(
       onTap: () {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => MensagemDetalhe(msg: msg)));
@@ -124,7 +120,7 @@ class Mensagens extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(6.0, 3.0, 6.0, 3.0),
         child: new Card(
           // key: new ValueKey(msg.documentID),
-          elevation: 2.0,
+          elevation: isIOS ? 1.0 : 2.0,
           child: new Column(
             children: <Widget>[
               new Container(
@@ -134,12 +130,6 @@ class Mensagens extends StatelessWidget {
                 child: new Stack(
                   fit: StackFit.expand,
                   children: <Widget>[
-                    // new Image.network(imgUrl, fit: BoxFit.cover),
-                    // FadeInImage.assetNetwork(
-                    //   placeholder: 'assets/images/placeholder-image.png',
-                    //   image: imgUrl,
-                    //   fit: BoxFit.cover,
-                    // ),
                     new CachedNetworkImage(
                       imageUrl: msg.imagem.url,
                       placeholder: Image.asset(
@@ -221,19 +211,31 @@ class Mensagens extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final bloc = Provider.of(context);
-    // bloc.selecionarIgreja('oliveira3');
-    if (globals.igreja.isEmpty) {
-      selecionarIgrejaModal(context);
-    } else if (globals.igreja.isNotEmpty) {
-      bloc.selecionarIgreja(globals.igreja);
-    }
-    bloc.igreja.listen((hasIgreja) async {
-      print('Igreja => $hasIgreja');
-    });
-    return new Scaffold(
+  Widget _iosMsgPg(BuildContext context, Bloc bloc) {
+    return CupertinoPageScaffold(
+      backgroundColor: Colors.grey[50],
+      navigationBar: CupertinoNavigationBar(
+        middle: Text('Mensagens'),
+      ),
+      child: StreamBuilder(
+        stream: bloc.mensagens,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return LinearProgressIndicator();
+          }
+          return new ListView.builder(
+              itemCount: snapshot.data.documents.length,
+              itemBuilder: (context, index) {
+                return _buildListItem(context,
+                    new Mensagem.fromJson(snapshot.data.documents[index].data), isIOS: true);
+              });
+        },
+      ),
+    );
+  }
+
+  Scaffold _androidMsgPg(BuildContext context, Bloc bloc) {
+    return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppTabBar(
         title: Text('Mensagens'),
@@ -242,20 +244,11 @@ class Mensagens extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0.0, 3.0, 0.0, 3.0),
         child: new StreamBuilder(
-          // stream: Firestore.instance
-          //     .collection('mensagens')
-          //     .where('publicado', isEqualTo: true)
-          //     .snapshots(),
           stream: bloc.mensagens,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return LinearProgressIndicator();
             }
-            // snapshot.data.documents.forEach((doc) {
-            //   // print(doc.data);
-            //   Mensagem msg = new Mensagem.fromJson((doc.data));
-            //   print('Título >>>>> ${msg.titulo}');
-            // });
             return new ListView.builder(
                 itemCount: snapshot.data.documents.length,
                 itemBuilder: (context, index) {
@@ -269,30 +262,29 @@ class Mensagens extends StatelessWidget {
       ),
     );
   }
-}
 
-// _buildListItem(BuildContext context, DocumentSnapshot document) {
-//   return new ListTile(
-//     key: new ValueKey(document.documentID),
-//     title: new Container(
-//       decoration: new BoxDecoration(
-//         border: new Border.all(color: const Color(0x80000000)),
-//         borderRadius: new BorderRadius.circular(5.0),
-//       ),
-//       padding: const EdgeInsets.all(10.0),
-//       child: new Row(
-//         children: <Widget>[
-//           new Expanded(
-//             child: new Text(document['igreja']),
-//           ),
-//           new Text(
-//             document['votes'].toString(),
-//           )
-//         ],
-//       ),
-//     ),
-//   );
-// }
+  @override
+  Widget build(BuildContext context) {
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    final bloc = Provider.of(context);
+
+    if (globals.igreja.isEmpty) {
+      selecionarIgrejaModal(context);
+    } else if (globals.igreja.isNotEmpty) {
+      bloc.selecionarIgreja(globals.igreja);
+    }
+
+    // bloc.igreja.listen((hasIgreja) async {
+    //   print('Igreja => $hasIgreja');
+    // });
+
+    if (isIOS) {
+      return _iosMsgPg(context, bloc);
+    } else {
+      return _androidMsgPg(context, bloc);
+    }
+  }
+}
 
 class CustomCard extends StatelessWidget {
   Future selecionarIgrejaModal(BuildContext context) async {

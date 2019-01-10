@@ -1,8 +1,11 @@
-import 'package:distrito_app/widgets/app_tabbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:html2md/html2md.dart' as html2md;
 import 'package:cached_network_image/cached_network_image.dart';
+
+import 'package:distrito_app/widgets/app_tabbar.dart';
 import '../utils/functions.dart' as fn;
 import './anuncio_detalhe.dart';
 import '../utils/bloc.dart';
@@ -23,7 +26,8 @@ class AnunciosState extends State<Anuncios> {
     super.dispose();
   }
 
-  _buildListItem(BuildContext context, DocumentSnapshot document) {
+  _buildListItem(BuildContext context, DocumentSnapshot document,
+      {isIOS: false}) {
     final img = document['imagem'];
     final imgUrl = img['url'];
     String descricao = document['descricao'].toString();
@@ -40,7 +44,7 @@ class AnunciosState extends State<Anuncios> {
         padding: const EdgeInsets.fromLTRB(0.0, 3.0, 0.0, 3.0),
         child: new Card(
           key: new ValueKey(document.documentID),
-          elevation: 2.0,
+          elevation: isIOS ? 1.0 : 2.0,
           child: new Column(
             children: <Widget>[
               new Container(
@@ -48,18 +52,15 @@ class AnunciosState extends State<Anuncios> {
                   height: 200.0,
                 ),
                 child: new Stack(fit: StackFit.expand, children: <Widget>[
-                  // new Image.network(imgUrl, fit: BoxFit.cover),
-                  // FadeInImage.assetNetwork(
-                  //     placeholder: 'assets/images/placeholder-image.png',
-                  //     image: imgUrl,
-                  //     fit: BoxFit.cover,
-                  //   ),
                   new CachedNetworkImage(
-                      imageUrl: imgUrl,
-                      placeholder: Image.asset('assets/images/placeholder-image.png', fit: BoxFit.cover,),
+                    imageUrl: imgUrl,
+                    placeholder: Image.asset(
+                      'assets/images/placeholder-image.png',
                       fit: BoxFit.cover,
-                      errorWidget: new Icon(Icons.error),
                     ),
+                    fit: BoxFit.cover,
+                    errorWidget: new Icon(Icons.error),
+                  ),
                   new Positioned(
                     left: 0.0,
                     right: 0.0,
@@ -115,7 +116,7 @@ class AnunciosState extends State<Anuncios> {
                     ),
                     new Expanded(
                         child: new Text(
-                      '${fn.dataPorExtensoAbreviada(document.data['cronograma'][0]['timestamp'])} ${document.data['cronograma'].length > 1 ? 'à': ''} ${document.data['cronograma'].length > 1 ? fn.dataPorExtensoAbreviada(document.data['cronograma'][document.data['cronograma'].length - 1]['timestamp']) : '' }',
+                      '${fn.dataPorExtensoAbreviada(document.data['cronograma'][0]['timestamp'])} ${document.data['cronograma'].length > 1 ? 'à' : ''} ${document.data['cronograma'].length > 1 ? fn.dataPorExtensoAbreviada(document.data['cronograma'][document.data['cronograma'].length - 1]['timestamp']) : ''}',
                       style: new TextStyle(fontSize: 16.0),
                     )),
                   ],
@@ -144,32 +145,58 @@ class AnunciosState extends State<Anuncios> {
     );
   }
 
+  StreamBuilder<QuerySnapshot> _anunciosPageItens(Bloc bloc, {isIOS: false}) {
+    return new StreamBuilder(
+      stream: bloc.anuncios,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return isIOS
+              ? CupertinoActivityIndicator()
+              : LinearProgressIndicator();
+        }
+        return new ListView.builder(
+            itemCount: snapshot.data.documents.length,
+            itemBuilder: (context, index) {
+              return _buildListItem(context, snapshot.data.documents[index],
+                  isIOS: isIOS);
+            });
+      },
+    );
+  }
+
+  _iosAnuncioPage(BuildContext context, Bloc bloc, {isIOS: false}) {
+    return CupertinoPageScaffold(
+      backgroundColor: Colors.grey[50],
+      navigationBar: CupertinoNavigationBar(
+        middle: Text('Comunicação'),
+      ),
+      child: _anunciosPageItens(bloc, isIOS: true),
+    );
+  }
+
+  Widget _androidAnuncioPage(BuildContext context, Bloc bloc) {
+    return new Scaffold(
+      resizeToAvoidBottomPadding: false,
+      appBar: AppTabBar(
+        title: Text('Comunicação'),
+        context: context,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(6.0, 3.0, 6.0, 3.0),
+        child: _anunciosPageItens(bloc),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of(context);
-    return new Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: AppTabBar(title: Text('Comunicação'), context: context,),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(6.0, 3.0, 6.0, 3.0),
-        child: new StreamBuilder(
-          // stream: Firestore.instance
-          //     .collection('anuncios')
-          //     .where('publicado', isEqualTo: true)
-          //     .snapshots(),
-          stream: bloc.anuncios,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return LinearProgressIndicator();
-            }
-            return new ListView.builder(
-                itemCount: snapshot.data.documents.length,
-                itemBuilder: (context, index) {
-                  return _buildListItem(context, snapshot.data.documents[index]);
-                });
-          },
-        ),
-      ),
-    );
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+
+    if (isIOS) {
+      return _iosAnuncioPage(context, bloc, isIOS: true);
+    } else {
+      return _androidAnuncioPage(context, bloc);
+    }
   }
 }

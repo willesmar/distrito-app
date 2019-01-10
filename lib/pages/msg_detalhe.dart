@@ -1,11 +1,12 @@
-import 'package:distrito_app/model/mensagem/mensagem.dart';
-import 'package:distrito_app/widgets/app_tabbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:html2md/html2md.dart' as html2md;
 
-import '../utils/functions.dart' as fn;
+import 'package:distrito_app/model/mensagem/mensagem.dart';
+import 'package:distrito_app/widgets/app_tabbar.dart';
 import 'package:distrito_app/model/mensagem/autor.dart';
 import 'package:distrito_app/model/imagem.dart';
+import '../utils/functions.dart' as fn;
 import './image_wrapper.dart';
 
 class MensagemDetalhe extends StatelessWidget {
@@ -13,27 +14,56 @@ class MensagemDetalhe extends StatelessWidget {
   final Mensagem msg;
   @override
   Widget build(BuildContext context) {
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     String mensagem = msg.msg.toString();
     String markdown = html2md.convert(mensagem);
 
-    return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: AppTabBar(title: Text(msg.titulo), context: context,),
-      body: new ListView(
-        children: <Widget>[
-          new Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              new ShowImage(imagem: msg.imagem),
-              new ShowPassagem(passagem: msg.passagem),
-              new ShowDate(timestamp: msg.timestamp),
-              new ShowMensagem(markdown: markdown),
-              new ShowAutor(autor: msg.autor),
-            ],
-          ),
-        ],
-      ),
+    if (isIOS) {
+      return CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          middle: Text(msg.titulo),
+        ),
+        child: new _pageItens(msg: msg, markdown: markdown),
+      );
+    } else {
+      return Scaffold(
+        resizeToAvoidBottomPadding: false,
+        appBar: AppTabBar(
+          title: Text(msg.titulo),
+          context: context,
+        ),
+        body: new _pageItens(msg: msg, markdown: markdown),
+      );
+    }
+  }
+}
+
+class _pageItens extends StatelessWidget {
+  const _pageItens({
+    Key key,
+    @required this.msg,
+    @required this.markdown,
+  }) : super(key: key);
+
+  final Mensagem msg;
+  final String markdown;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: <Widget>[
+        new Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            new ShowImage(imagem: msg.imagem),
+            new ShowPassagem(passagem: msg.passagem),
+            new ShowDate(timestamp: msg.timestamp),
+            new ShowMensagem(markdown: markdown),
+            new ShowAutor(autor: msg.autor),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -160,23 +190,6 @@ class ShowImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return new Image.network(imagem.url, fit: BoxFit.cover);
-    // return GestureDetector(
-    //   onTap: () {
-    //     Navigator.of(context).push(MaterialPageRoute<Null>(
-    //       builder: (BuildContext context) {
-    //         return ImageFullScreen(imagemUrl: imagem.url);
-    //       },
-    //       fullscreenDialog: true,
-    //     ));
-    //   },
-    //   child: CachedNetworkImage(
-    //     imageUrl: imagem.url,
-    //     placeholder: Image.asset('assets/images/placeholder-image.png'),
-    //     fit: BoxFit.cover,
-    //     errorWidget: new Icon(Icons.error),
-    //   ),
-    // );
     return ImageWrapper(
       imagemUrl: imagem.url,
     );

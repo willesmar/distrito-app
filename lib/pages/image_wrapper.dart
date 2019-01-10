@@ -20,16 +20,16 @@ class ImageWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute<Null>(
-          builder: (BuildContext context) {
-            return ImageFullScreen(imagemUrl: imagemUrl);
-          },
-          fullscreenDialog: fullscreenDialog,
-        ));
-      },
-      child: SafeArea(
+    return SafeArea(
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute<Null>(
+            builder: (BuildContext context) {
+              return ImageFullScreen(imagemUrl: imagemUrl);
+            },
+            fullscreenDialog: fullscreenDialog,
+          ));
+        },
         child: CachedNetworkImage(
           imageUrl: imagemUrl,
           placeholder: Image.asset(placeholderImgUrl),

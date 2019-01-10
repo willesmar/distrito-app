@@ -20,8 +20,9 @@ class Contato {
   Contato({this.icone, this.nome, this.url});
 
   factory Contato.fromJson(Map<dynamic, dynamic> json) {
+    final icon = json['icone'];
     return new Contato(
-      icone: json['icone'],
+      icone: icon['valor'],
       nome: json['nome'],
       url: json['url'],
     );
@@ -364,6 +365,7 @@ class Sobre extends StatelessWidget {
             ),
             icon: Icon(_getIcon(contato.icone)),
             onPressed: () async {
+              print('${contato.url}');
               if (await canLaunch('${contato.url}')) {
                 await launch('${contato.url}');
               }
@@ -447,7 +449,10 @@ class Sobre extends StatelessWidget {
 
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppTabBar(title: Text('Sobre'), context: context,),
+      appBar: AppTabBar(
+        title: Text('Sobre'),
+        context: context,
+      ),
       body: StreamBuilder(
           stream: bloc.sobre,
           builder: (context, snapshot) {

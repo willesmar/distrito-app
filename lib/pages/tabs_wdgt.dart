@@ -1,4 +1,5 @@
 import 'package:distrito_app/model/push_notification.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:distrito_app/utils/custom_icons_icons.dart';
@@ -60,58 +61,75 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-    // final bloc = Provider.of(context);
-    // bloc.igreja.listen((hasIgreja) async {
-    //   print('Igreja => $hasIgreja');
-    //   if (hasIgreja.length < 1) {
-    //     await selecionarIgrejaModal(context);
-    //   }
-    // });
-    // onMessage: {
-    //   notification: {
-    //     title: Titulo 3 teste,
-    //     body: Mensagem de teste distrito app
-    //     },
-    //   data: {
-    //     key: value,
-    //     canal: comunicacao
-    //   }
-    // }
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        PushNotification pushMessage = PushNotification.fromJson(message);
-        // print("onMessage: $message");
-        // _showItemDialog(message);
-        showPushNotification(context, pushMessage);
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        // print("onLaunch: $message");
-        // _navigateToItemDetail(message);
-        PushNotification pushMessage = PushNotification.fromJson(message);
-        showPushNotification(context, pushMessage);
-        // controller.animateTo(2);
-      },
-      onResume: (Map<String, dynamic> message) async {
-        // print("onResume: $message");
-        PushNotification pushMessage = PushNotification.fromJson(message);
-        showPushNotification(context, pushMessage);
-        // controller.animateTo(3);
-        // _navigateToItemDetail(message);
-      },
+  Provider _iosTabs(BuildContext context) {
+    return Provider(
+      child: CupertinoTabScaffold(
+        tabBar: CupertinoTabBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(IconData(0xf42e,
+                  fontFamily: 'CupertinoIcons',
+                  fontPackage: 'cupertino_icons')),
+              title: Text('Mensagem'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(IconData(0xf2d1,
+                  fontFamily: 'CupertinoIcons',
+                  fontPackage: 'cupertino_icons')),
+              title: Text('Comunicação'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(IconData(0xf453,
+                  fontFamily: 'CupertinoIcons',
+                  fontPackage: 'cupertino_icons')),
+              title: Text('Programa'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(IconData(0xf44c,
+                  fontFamily: 'CupertinoIcons',
+                  fontPackage: 'cupertino_icons')),
+              title: Text('Sobre'),
+            ),
+          ],
+        ),
+        tabBuilder: (BuildContext context, int index) {
+          assert(index >= 0 && index <= 3);
+          switch (index) {
+            case 0:
+              return CupertinoTabView(
+                builder: (BuildContext context) {
+                  return new mensagens.Mensagens();
+                },
+              );
+              break;
+            case 1:
+              return CupertinoTabView(
+                builder: (BuildContext context) {
+                  return new anuncios.Anuncios();
+                },
+              );
+              break;
+            case 2:
+              return CupertinoTabView(
+                builder: (BuildContext context) {
+                  return new programa.Programa();
+                },
+              );
+              break;
+            case 3:
+              return CupertinoTabView(
+                builder: (BuildContext context) {
+                  return new sobre.Sobre();
+                },
+              );
+              break;
+          }
+        },
+      ),
     );
+  }
 
-    if (widget.igreja.isEmpty) {
-      selecionarIgrejaModal(context);
-    } else if (widget.igreja.isNotEmpty) {
-      globals.igreja = widget.igreja;
-    }
-    // widget.bloc.igreja.listen((hasIgreja) async {
-    //   print('Igreja => $hasIgreja');
-    // });
-
+  Provider _androidTabs(BuildContext context) {
     return Provider(
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
@@ -163,6 +181,64 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    // final bloc = Provider.of(context);
+    // bloc.igreja.listen((hasIgreja) async {
+    //   print('Igreja => $hasIgreja');
+    //   if (hasIgreja.length < 1) {
+    //     await selecionarIgrejaModal(context);
+    //   }
+    // });
+    // onMessage: {
+    //   notification: {
+    //     title: Titulo 3 teste,
+    //     body: Mensagem de teste distrito app
+    //     },
+    //   data: {
+    //     key: value,
+    //     canal: comunicacao
+    //   }
+    // }
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        PushNotification pushMessage = PushNotification.fromJson(message);
+        // print("onMessage: $message");
+        // _showItemDialog(message);
+        showPushNotification(context, pushMessage);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        // print("onLaunch: $message");
+        // _navigateToItemDetail(message);
+        PushNotification pushMessage = PushNotification.fromJson(message);
+        showPushNotification(context, pushMessage);
+        // controller.animateTo(2);
+      },
+      onResume: (Map<String, dynamic> message) async {
+        // print("onResume: $message");
+        PushNotification pushMessage = PushNotification.fromJson(message);
+        showPushNotification(context, pushMessage);
+        // controller.animateTo(3);
+        // _navigateToItemDetail(message);
+      },
+    );
+
+    if (widget.igreja.isEmpty) {
+      selecionarIgrejaModal(context);
+    } else if (widget.igreja.isNotEmpty) {
+      globals.igreja = widget.igreja;
+    }
+    // widget.bloc.igreja.listen((hasIgreja) async {
+    //   print('Igreja => $hasIgreja');
+    // });
+    if (isIOS) {
+      return _iosTabs(context);
+    } else {
+      return _androidTabs(context);
+    }
   }
 
   void showPushNotification(
