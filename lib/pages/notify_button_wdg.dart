@@ -16,19 +16,16 @@ class NotificarButtonWidget extends StatelessWidget {
         if (snapshot.hasData) {
           _notify = snapshot?.data;
           return IconButton(
-            icon: Padding(
-              padding: const EdgeInsets.only(right: 24.0),
-              child: snapshot?.data == true
-                  ? Icon(Icons.notifications_active)
-                  : Icon(Icons.notifications_none),
-            ),
+            icon: snapshot?.data == true
+                ? Icon(Icons.notifications_active)
+                : Icon(Icons.notifications_none),
             onPressed: () {
               _notify = !_notify;
               ntfBloc.notificarPrgrm(_notify);
             },
           );
         }
-        return Container();
+        return Container(color: Colors.greenAccent,);
       },
     );
   }

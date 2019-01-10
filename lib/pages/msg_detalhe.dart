@@ -1,4 +1,5 @@
 import 'package:distrito_app/model/mensagem/mensagem.dart';
+import 'package:distrito_app/widgets/app_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:html2md/html2md.dart' as html2md;
 
@@ -17,9 +18,7 @@ class MensagemDetalhe extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        title: Text(msg.titulo),
-      ),
+      appBar: AppTabBar(title: Text(msg.titulo), context: context,),
       body: new ListView(
         children: <Widget>[
           new Column(

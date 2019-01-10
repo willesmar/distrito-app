@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -8,9 +9,9 @@ import 'package:distrito_app/pages/splashscreen.dart';
 // import 'dart:async';
 // import 'dart:math' as math;
 // import 'package:distrito_app/utils/custom_icons_icons.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-// import './utils/globals.dart' as globals;
+import './utils/globals.dart' as globals;
 // import './pages/msgs.dart' as mensagens;
 // import './pages/anuncios.dart' as anuncios;
 // import './pages/programa.dart' as programa;
@@ -45,18 +46,36 @@ void main() {
 class DistritoApp extends StatelessWidget {
   // final Bloc bloc;
 
-  DistritoApp();
+  DistritoApp() {
+    checkIgreja();
+  }
 
-  // checkIgreja() async {
-  //   bool igreja = await this.bloc.igreja.isEmpty.then((hasIgreja) {
-  //     print('Igreja => $hasIgreja');
-  //     return hasIgreja;
-  //   });
-  //   return igreja;
-  // }
+  checkIgreja() async {
+    final SharedPreferences prefs = await globals.sprefs;
+    prefs.setString('igreja', 'oliveira3');
+  }
 
   @override
   Widget build(BuildContext context) {
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+
+    // if (isIOS) {
+    //   return CupertinoApp(
+    //     debugShowCheckedModeBanner: false,
+    //     home: SplashScreen(),
+    //   );
+    // }
+    final ThemeData kIOSTheme = new ThemeData(
+      primarySwatch: Colors.blue,
+      primaryColor: Colors.grey[200],
+      primaryColorBrightness: Brightness.light,
+    );
+
+    final ThemeData kDefaultTheme = new ThemeData(
+      primaryColor: Color(0xFF003366), //Colors.lightBlueAccent[700],
+      backgroundColor: Color(0xFFF3FDFE),
+      bottomAppBarColor: Color(0xFF003366),
+    );
     // var qqcoisa = checkIgreja();
 
     // this.bloc.igreja.isEmpty.then((hasIgreja) {
@@ -66,11 +85,7 @@ class DistritoApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // debugShowMaterialGrid: true,
-      theme: ThemeData(
-        primaryColor: Color(0xFF003366), //Colors.lightBlueAccent[700],
-        backgroundColor: Color(0xFFF3FDFE),
-        bottomAppBarColor: Color(0xFF003366),
-      ),
+      theme: isIOS ? kIOSTheme : kDefaultTheme,
       home: SplashScreen(),
       // child: MyTabs(),
     );

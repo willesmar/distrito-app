@@ -3,6 +3,7 @@ import 'package:distrito_app/model/programa.dart';
 import 'package:distrito_app/pages/notify_button_wdg.dart';
 import 'package:distrito_app/utils/bloc_provider.dart';
 import 'package:distrito_app/utils/programa_notification_bloc.dart';
+import 'package:distrito_app/widgets/app_tabbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:screen/screen.dart';
@@ -47,6 +48,7 @@ class ProgramaState extends State<Programa> {
       {String grupoAtividade: null}) {
     List<Widget> listaAtividade = [];
     List<Widget> listaRetornada = [];
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     for (var i = 0; i < atividade.length; i++) {
       listaAtividade.add(_buildCard(context, atividade[i]));
@@ -54,16 +56,16 @@ class ProgramaState extends State<Programa> {
 
     if (grupoAtividade != null) {
       listaRetornada.add(Container(
-          decoration: BoxDecoration(color: topColor),
+          decoration: BoxDecoration(color: isIOS ? Colors.grey[200] : topColor),
           child: ExpansionTile(
-            initiallyExpanded: false,
-            backgroundColor: topColor,
+            initiallyExpanded: true,
+            backgroundColor: isIOS ? Colors.grey[200] : topColor,
             title: Text(
               grupoAtividade.toString(),
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20.0,
-                  color: Colors.white),
+                  color: isIOS ? Colors.grey[900] : Colors.white),
             ),
             children: listaAtividade.toList(),
           )));
@@ -134,10 +136,11 @@ class ProgramaState extends State<Programa> {
     num esSize = prgrm.escolaSabatina.length;
     num extraSize = prgrm.extra.length;
     num cultoSize = prgrm.culto.length;
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     listaPrograma.add(
       Container(
-        decoration: BoxDecoration(color: topColor),
+        decoration: BoxDecoration(color: isIOS ? Colors.grey[200] : topColor),
         padding: EdgeInsets.only(top: 8.0),
         child: ListTile(
           dense: true,
@@ -147,13 +150,15 @@ class ProgramaState extends State<Programa> {
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24.0,
-                  color: Colors.white),
+                  color: isIOS ? Colors.grey[900] : Colors.white),
             ),
           ),
           subtitle: Center(
             child: Text(
               fn.dataCompleta(prgrm.timestamp),
-              style: new TextStyle(fontSize: 16.0, color: Colors.white),
+              style: new TextStyle(
+                  fontSize: 16.0,
+                  color: isIOS ? Colors.grey[900] : Colors.white),
             ),
           ),
         ),
@@ -167,16 +172,16 @@ class ProgramaState extends State<Programa> {
         listaEscala.add(makeEscala(key, integrantes));
       });
       listaPrograma.add(Container(
-          decoration: BoxDecoration(color: topColor),
+          decoration: BoxDecoration(color: isIOS ? Colors.grey[200] : topColor),
           child: ExpansionTile(
             initiallyExpanded: false,
-            backgroundColor: topColor,
+            backgroundColor: isIOS ? Colors.grey[100] : topColor,
             title: Text(
               'Escalas',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20.0,
-                  color: Colors.white),
+                  color: isIOS ? Colors.grey[900] : Colors.white),
             ),
             children: <Widget>[
               Container(
@@ -241,93 +246,282 @@ class ProgramaState extends State<Programa> {
     }
   }
 
+  TextStyle _formatResponsavelDuracaoTituloText() {
+    return TextStyle(fontSize: 10.0, color: Colors.grey[600]);
+  }
+
+  TextStyle _formatResponsavelDuracaoText() {
+    return TextStyle(fontSize: 14.0, color: Colors.grey[800]);
+  }
+
   Widget _buildCard(BuildContext context, document) {
     IconData _icone = _getIcon(document.icone);
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     return Container(
       decoration: BoxDecoration(color: Colors.white),
-      child: new Stack(
-        children: <Widget>[
-          new Padding(
-            padding: const EdgeInsets.only(left: 45.0),
-            child: Container(
-              width: double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(4.0, 8.0, 12.0, 8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 3.0),
-                      child: Text(
-                        document.nomeAtividade,
-                        style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+        child: Card(
+          color: Colors.grey[100],
+          clipBehavior: Clip.antiAlias,
+          elevation: isIOS ? 0.3 : 2.0,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Flexible(
+                flex: 2,
+                // fit: FlexFit.tight,
+                child: Container(
+                  color: isIOS
+                      ? Colors.grey[400]
+                      : Color(0xFF3E8391).withOpacity(0.7),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0, right: 3.0),
-                          child: Icon(
-                            Icons.schedule,
-                            size: 14.0,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              child:
+                                  Icon(_icone, color: Colors.white, size: 26.0),
+                            ),
+                          ],
                         ),
-                        Text(
-                          '${document.hInicio} - ${document.duracao} min',
-                          style: TextStyle(fontSize: 14.0),
+                        SizedBox(
+                          height: 8.0,
                         ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(left: 10.0, right: 3.0),
-                          child: Icon(
-                            Icons.person,
-                            size: 14.0,
-                          ),
-                        ),
-                        Text(
-                          document.responsavel,
-                          style: TextStyle(fontSize: 14.0),
+                        Row(
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          // crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              // color: Colors.yellowAccent,
+                              child: Center(
+                                child: Text(
+                                  '${document.hInicio}',
+                                  style: TextStyle(
+                                    fontFamily: 'Digital-7',
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white,
+                                  ),
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
-          new Positioned(
-            top: 0.0,
-            bottom: 0.0,
-            left: 30.0,
-            child: new Container(
-              height: double.infinity,
-              width: 1.0,
-              color: Color(0xFFBACEE6),
-            ),
-          ),
-          new Positioned(
-            //TODO: use checkbox?
-            top: 15.0,
-            left: 10.0,
-            child: new Container(
-              height: 40.0,
-              width: 40.0,
-              child: new Icon(_icone, color: Colors.white, size: 30.0),
-              decoration: new BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color(0xFFA7B9D1),
+              Flexible(
+                flex: 8,
+                fit: FlexFit.tight,
+                child: Container(
+                  // color: Colors.grey[100],
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Flexible(
+                              child: Container(
+                                child: Text(
+                                  document.nomeAtividade,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w700),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Divider(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                      'DURAÇÃO',
+                                      style:
+                                          _formatResponsavelDuracaoTituloText(),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                      '${document.duracao} min',
+                                      style: _formatResponsavelDuracaoText(),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                            _getFimAtividade(document.hFim),
+                            Column(
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                      'RESPONSÁVEL',
+                                      style:
+                                          _formatResponsavelDuracaoTituloText(),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                      document.responsavel,
+                                      style: _formatResponsavelDuracaoText(),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ),
-          )
-        ],
+            ],
+          ),
+        ),
       ),
     );
+
+    // return Container(
+    //   decoration: BoxDecoration(color: Colors.white),
+    //   child: new Stack(
+    //     children: <Widget>[
+    //       new Padding(
+    //         padding: const EdgeInsets.only(left: 45.0),
+    //         child: Container(
+    //           width: double.infinity,
+    //           child: Padding(
+    //             padding: const EdgeInsets.fromLTRB(4.0, 8.0, 12.0, 8.0),
+    //             child: Column(
+    //               mainAxisAlignment: MainAxisAlignment.start,
+    //               mainAxisSize: MainAxisSize.max,
+    //               crossAxisAlignment: CrossAxisAlignment.start,
+    //               children: <Widget>[
+    //                 Padding(
+    //                   padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 3.0),
+    //                   child: Text(
+    //                     document.nomeAtividade,
+    //                     style: TextStyle(
+    //                         fontSize: 16.0, fontWeight: FontWeight.w500),
+    //                   ),
+    //                 ),
+    //                 Row(
+    //                   mainAxisAlignment: MainAxisAlignment.start,
+    //                   mainAxisSize: MainAxisSize.max,
+    //                   children: <Widget>[
+    //                     Padding(
+    //                       padding: const EdgeInsets.only(left: 8.0, right: 3.0),
+    //                       child: Icon(
+    //                         Icons.schedule,
+    //                         size: 14.0,
+    //                       ),
+    //                     ),
+    //                     Text(
+    //                       '${document.hInicio} - ${document.duracao} min',
+    //                       style: TextStyle(fontSize: 14.0),
+    //                     ),
+    //                     Padding(
+    //                       padding:
+    //                           const EdgeInsets.only(left: 10.0, right: 3.0),
+    //                       child: Icon(
+    //                         Icons.person,
+    //                         size: 14.0,
+    //                       ),
+    //                     ),
+    //                     Text(
+    //                       document.responsavel,
+    //                       style: TextStyle(fontSize: 14.0),
+    //                     ),
+    //                   ],
+    //                 ),
+    //               ],
+    //             ),
+    //           ),
+    //         ),
+    //       ),
+    //       new Positioned(
+    //         top: 0.0,
+    //         bottom: 0.0,
+    //         left: 30.0,
+    //         child: new Container(
+    //           height: double.infinity,
+    //           width: 1.0,
+    //           color: Color(0xFFBACEE6),
+    //         ),
+    //       ),
+    //       new Positioned(
+    //         //TODO: use checkbox?
+    //         top: 15.0,
+    //         left: 10.0,
+    //         child: new Container(
+    //           height: 40.0,
+    //           width: 40.0,
+    //           child: new Icon(_icone, color: Colors.white, size: 30.0),
+    //           decoration: new BoxDecoration(
+    //             shape: BoxShape.circle,
+    //             color: Color(0xFFA7B9D1),
+    //           ),
+    //         ),
+    //       )
+    //     ],
+    //   ),
+    // );
+  }
+
+  Widget _getFimAtividade(String hFim) {
+    Size screen = MediaQuery.of(context).size;
+    // print(screen.width);
+    if (screen.width >= 360.0) {
+      return Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Text(
+                'FINAL',
+                style: _formatResponsavelDuracaoTituloText(),
+              )
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Text(
+                '${hFim}',
+                style: _formatResponsavelDuracaoText(),
+              )
+            ],
+          ),
+        ],
+      );
+    }
+    return Container();
   }
 
   // @override
@@ -378,34 +572,18 @@ class ProgramaState extends State<Programa> {
     Screen.keepOn(true);
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        title: new Text('Programa'),
-        actions: <Widget>[
-          BlocProvider<ProgramaNotificationBloc>(
-            bloc: ProgramaNotificationBloc(),
-            child: NotificarButtonWidget(),
-          ),
-          // StreamBuilder<bool>(
-          //   stream: bloc.notificacaoPrgrm,
-          //   initialData: false,
-          //   builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          //     if (snapshot.hasData) {
-          //       _notify = snapshot?.data;
-          //       return IconButton(
-          //         icon: snapshot?.data == true
-          //             ? Icon(Icons.notifications_active)
-          //             : Icon(Icons.notifications_none),
-          //         onPressed: () {
-          //           _notify = !_notify;
-          //           bloc.notificarPrgrm(_notify);
-          //         },
-          //       );
-          //     }
-          //     return Container();
-          //   },
-          // ),
-        ],
-      ),
+      appBar: AppTabBar(
+          title: Text('Programação'),
+          context: context,
+          actions: <Widget>[
+            BlocProvider<ProgramaNotificationBloc>(
+              bloc: ProgramaNotificationBloc(),
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: NotificarButtonWidget(),
+              ),
+            ),
+          ]),
       body: new StreamBuilder(
         stream: bloc.programas,
         builder: (context, snapshot) {

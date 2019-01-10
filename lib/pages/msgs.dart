@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:distrito_app/model/mensagem/mensagem.dart';
+import 'package:distrito_app/widgets/app_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -116,10 +117,8 @@ class Mensagens extends StatelessWidget {
     // print('Título >>>>> ${msg.titulo}');
     return new GestureDetector(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MensagemDetalhe(msg: msg)));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => MensagemDetalhe(msg: msg)));
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(6.0, 3.0, 6.0, 3.0),
@@ -143,8 +142,10 @@ class Mensagens extends StatelessWidget {
                     // ),
                     new CachedNetworkImage(
                       imageUrl: msg.imagem.url,
-                      placeholder:
-                          Image.asset('assets/images/placeholder-image.png', fit: BoxFit.cover,),
+                      placeholder: Image.asset(
+                        'assets/images/placeholder-image.png',
+                        fit: BoxFit.cover,
+                      ),
                       fit: BoxFit.cover,
                       errorWidget: new Icon(Icons.error),
                     ),
@@ -234,9 +235,9 @@ class Mensagens extends StatelessWidget {
     });
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: new AppBar(
-        title: new Text('Mensagens'),
-        backgroundColor: Theme.of(context).primaryColor,
+      appBar: AppTabBar(
+        title: Text('Mensagens'),
+        context: context,
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0.0, 3.0, 0.0, 3.0),
@@ -259,7 +260,9 @@ class Mensagens extends StatelessWidget {
                 itemCount: snapshot.data.documents.length,
                 itemBuilder: (context, index) {
                   return _buildListItem(
-                      context, new Mensagem.fromJson(snapshot.data.documents[index].data));
+                      context,
+                      new Mensagem.fromJson(
+                          snapshot.data.documents[index].data));
                 });
           },
         ),

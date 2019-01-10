@@ -4,7 +4,7 @@
     <item android:drawable="@android:color/white" />
 
     <!-- You can insert your own image assets here -->
-    <item android:width="30dp" android:height="30dp" android:gravity="center">
+    <!-- <item android:width="5dp" android:height="5dp" android:gravity="center">
         <bitmap android:gravity="center" android:src="@mipmap/iasd_sp" />
-    </item>
+    </item> -->
 </layer-list>

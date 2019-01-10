@@ -15,6 +15,7 @@ dependencies:
   url_launcher: ^3.0.3
   rxdart: ^0.18.1
   cached_network_image: "^0.4.1"
+  auto_size_text: ^0.3.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -77,3 +78,6 @@ flutter:
   - family:  CustomIcons
     fonts:
       - asset: assets/fonts/CustomIcons.ttf
+  - family: Digital-7
+    fonts:
+      - asset: assets/fonts/digital-7.ttf

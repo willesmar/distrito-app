@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:distrito_app/pages/tabs_wdgt.dart';
 import '../utils/globals.dart' as globals;
@@ -25,10 +26,10 @@ class _SplashScreenState extends State<SplashScreen> {
     new Igreja(igreja: 'IASD Oliveira 3', valor: 'oliveira3'),
     new Igreja(igreja: 'IASD Piratininga', valor: 'piratininga'),
     new Igreja(igreja: 'IASD Caiçara', valor: 'caicara'),
-    new Igreja(igreja: 'Grupo União', valor: 'uniao'),
-    new Igreja(igreja: 'Grupo Aquários', valor: 'aquarios'),
-    new Igreja(igreja: 'Grupo Nações', valor: 'nacoes'),
   ];
+    // new Igreja(igreja: 'Grupo União', valor: 'uniao'),
+    // new Igreja(igreja: 'Grupo Aquários', valor: 'aquarios'),
+    // new Igreja(igreja: 'Grupo Nações', valor: 'nacoes'),
   // List<DropdownMenuItem<String>> _dropDownMenuItems;
   String _currentIgreja;
 
@@ -168,6 +169,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+
+    return isIOS ? _iosSplash(context) : _androidSplash(context);
+  }
+
+  Scaffold _androidSplash(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Stack(
@@ -189,33 +196,10 @@ class _SplashScreenState extends State<SplashScreen> {
                   Container(
                     child: Column(
                       children: <Widget>[
-                        // description,
                         SizedBox(
                           height: 15.0,
                         ),
-                        // dropdownButton(),
                         dropdownInput(context),
-                        // SizedBox(
-                        //   height: 15.0,
-                        // ),
-                        // button('Entrar', () {
-                        //   print('<<<<<< entrar btn >>>>>');
-                        //   if (_currentIgreja.isNotEmpty) {
-                        //     print(_currentIgreja);
-                        //     Navigator.of(context).pushReplacement(
-                        //         MaterialPageRoute(
-                        //             builder: (context) =>
-                        //                 MyTabs(igreja: _currentIgreja)));
-                        //   }
-                        //   // bloc.igreja.listen((hasIgreja) async {
-                        //   //   if (hasIgreja.length > 1 && _currentIgreja != null &&
-                        //   //       hasIgreja == _currentIgreja) {
-                        //   //     print(
-                        //   //         'Igreja => $hasIgreja e _currentIgreja $_currentIgreja');
-                        //   //     // await selecionarIgrejaModal(context);
-                        //   //   }
-                        //   // });
-                        // }),
                       ],
                     ),
                   ),
@@ -226,5 +210,119 @@ class _SplashScreenState extends State<SplashScreen> {
         ],
       ),
     );
+  }
+
+  Scaffold _iosSplash(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          background,
+          // blueOpacity,
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  logo,
+                  SizedBox(
+                    height: 30.0,
+                  ),
+                  Container(
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                        GestureDetector(
+                          onTap: () async {
+                            containerForSheet<String>(
+                              context: context,
+                              child: CupertinoActionSheet(
+                                  title: const Text('Escolha sua igreja', style: TextStyle(fontSize: 22.0),),
+                                  // message: const Text(
+                                  //     'Your options are '),
+                                  actions: _actionOptions(context),
+                                  cancelButton: CupertinoActionSheetAction(
+                                    child: const Text('Cancelar'),
+                                    isDefaultAction: true,
+                                    onPressed: () {
+                                      Navigator.pop(context, 'Cancel');
+                                    },
+                                  )),
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              // color: CupertinoColors.tr,
+                              border: Border(
+                                top: BorderSide(
+                                    color: Color(0xFFBCBBC1), width: 0.0),
+                                bottom: BorderSide(
+                                    color: Color(0xFFBCBBC1), width: 0.0),
+                              ),
+                            ),
+                            height: 54.0,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16.0),
+                              child: SafeArea(
+                                top: false,
+                                bottom: false,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    // const Text('Escolha uma igreja', style: TextStyle(fontSize: 18.0, color: CupertinoColors.inactiveGray),),
+                                    Text(
+                                      _igrejas[1].igreja,
+                                      style: TextStyle(
+                                          fontSize: 22.0,
+                                          color: CupertinoColors.black),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+   List<Widget> _actionOptions(BuildContext context) {
+    List<Widget> opt = [];
+    _igrejas.forEach((f) {
+      opt.add(
+        CupertinoActionSheetAction(
+          child: Text(f.igreja),
+          onPressed: () {
+            Navigator.pop(context, f.valor);
+          },
+        ),
+      );
+    });
+    return opt.toList();
+  }
+
+  void containerForSheet<T>({BuildContext context, Widget child}) {
+    showCupertinoModalPopup<T>(
+      context: context,
+      builder: (BuildContext context) => child,
+    ).then<void>((T value) {
+      Scaffold.of(context).showSnackBar(new SnackBar(
+        content: new Text('You clicked $value'),
+        duration: Duration(milliseconds: 800),
+      ));
+    });
   }
 }

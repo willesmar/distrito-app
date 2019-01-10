@@ -1,3 +1,4 @@
+import 'package:distrito_app/widgets/app_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:html2md/html2md.dart' as html2md;
@@ -148,10 +149,7 @@ class AnunciosState extends State<Anuncios> {
     final bloc = Provider.of(context);
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: new AppBar(
-        title: new Text('Comunicação'),
-        backgroundColor: Theme.of(context).primaryColor, //Colors.green[600],
-      ),
+      appBar: AppTabBar(title: Text('Comunicação'), context: context,),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(6.0, 3.0, 6.0, 3.0),
         child: new StreamBuilder(

@@ -1,3 +1,4 @@
+import 'package:distrito_app/widgets/app_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:html2md/html2md.dart' as html2md;
 
@@ -106,9 +107,7 @@ class AnuncioDetalhe extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        title: Text(document['nome']),
-      ),
+      appBar: AppTabBar(title: Text(document['nome']), context: context,),
       body: new ListView(
         children: <Widget>[
           // new Image.network(document['imagem']['url'], fit: BoxFit.cover),

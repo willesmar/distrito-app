@@ -7,13 +7,14 @@ import '../utils/globals.dart' as globals;
 class ProgramaNotificationBloc implements BlocBase {
   bool _notificar;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  Future<SharedPreferences> _sprefs = SharedPreferences.getInstance();
+  // Future<SharedPreferences> _sprefs = SharedPreferences.getInstance();
   final _notificarProgramaCtrl = BehaviorSubject<bool>();
   Stream<bool> get notificacaoPrgrm => _notificarProgramaCtrl.stream;
   Function(bool) get notificarPrgrm => _notificarProgramaCtrl.sink.add;
 
   ProgramaNotificationBloc() {
     _notificarProgramaCtrl.listen(_saveProgramaNotificacaoPreference);
+    _notificarProgramaCtrl.doOnError((e) => print(e));
     _getProgramaNotificacaoPreference();
   }
 
@@ -23,21 +24,25 @@ class ProgramaNotificationBloc implements BlocBase {
   }
 
   Future<Null> _saveProgramaNotificacaoPreference(bool notify) async {
-    final SharedPreferences prefs = await _sprefs;
+    final SharedPreferences prefs = await globals.sprefs;
+    print('SharedPreferences ${prefs.getString('igreja')}');
     if (_notificar != notify) {
       _notificar = notify;
       await prefs.setBool('notificacaoPrograma', notify);
       if (notify == true) {
         await _firebaseMessaging.subscribeToTopic('programa-${globals.igreja}');
       } else if (notify == false) {
-        await _firebaseMessaging.unsubscribeFromTopic('programa-${globals.igreja}');
+        await _firebaseMessaging
+            .unsubscribeFromTopic('programa-${globals.igreja}');
       }
     }
   }
 
   Future<Null> _getProgramaNotificacaoPreference() async {
-    final SharedPreferences prefs = await _sprefs;
+    final SharedPreferences prefs = await globals.sprefs;
     _notificar = await prefs.getBool('notificacaoPrograma');
-    notificarPrgrm(_notificar);
+    _notificarProgramaCtrl.isClosed
+        ? print('Stream closed')
+        : notificarPrgrm(_notificar);
   }
 }

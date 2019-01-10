@@ -62,6 +62,7 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     // final bloc = Provider.of(context);
     // bloc.igreja.listen((hasIgreja) async {
     //   print('Igreja => $hasIgreja');
@@ -115,6 +116,7 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         bottomNavigationBar: new Material(
+          elevation: 0.5,
           color: Theme.of(context).primaryColor, //Colors.green[900],
           child: new TabBar(
             controller: controller,

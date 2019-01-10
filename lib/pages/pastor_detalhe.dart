@@ -1,3 +1,4 @@
+import 'package:distrito_app/widgets/app_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:distrito_app/model/mensagem/autor.dart';
 import 'package:html2md/html2md.dart' as html2md;
@@ -18,9 +19,7 @@ class PastorDetalhe extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        title: Text('Nosso Pastor'),
-      ),
+      appBar: AppTabBar(title: Text('Nosso Pastor'), context: context,),
       body: new ListView(
         children: <Widget>[
           new Column(

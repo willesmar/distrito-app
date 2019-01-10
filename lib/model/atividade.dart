@@ -17,14 +17,15 @@ class Atividade {
       this.responsavel});
 
   factory Atividade.fromJson(Map<dynamic, dynamic> json) {
+    final _icone = json['icone'];
     return new Atividade(
       completada: json['completada'],
       duracao: json['duracao'],
       hFim: json['hFim'],
-      hInicio:  json['hInicio'],
-      icone: json['icone']['valor'],
-      nomeAtividade:  json['nomeAtividade'],
-      responsavel:  json['responsavel'],
+      hInicio: json['hInicio'],
+      icone: _icone['valor'],
+      nomeAtividade: json['nomeAtividade'],
+      responsavel: json['responsavel'],
     );
   }
 }

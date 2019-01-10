@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:io' show Platform;
+import 'package:distrito_app/widgets/app_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -28,8 +29,8 @@ class Contato {
 }
 
 class Sobre extends StatelessWidget {
-
-  final Color _cardHeaderColor = Color(0xFF2F557F);
+  Color _cardHeaderColor = Color(0xFF2F557F);
+  Color _cardHeaderColorFont = Colors.white;
 
   _launchMAPS(String lat, String long) async {
     String appleUrl = 'http://maps.apple.com/?ll=${lat},${long}';
@@ -113,7 +114,10 @@ class Sobre extends StatelessWidget {
           // new Image.network(fachada.url, fit: BoxFit.cover),
           new CachedNetworkImage(
             imageUrl: fachada.url,
-            placeholder: Image.asset('assets/images/placeholder-image.png', fit: BoxFit.cover,),
+            placeholder: Image.asset(
+              'assets/images/placeholder-image.png',
+              fit: BoxFit.cover,
+            ),
             fit: BoxFit.cover,
             errorWidget: new Icon(Icons.error),
           ),
@@ -182,7 +186,7 @@ class Sobre extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white),
+                          color: _cardHeaderColorFont),
                     ),
                   )
                 ]),
@@ -202,8 +206,10 @@ class Sobre extends StatelessWidget {
                     // ),
                     CachedNetworkImage(
                   imageUrl: sobreObj['endereco']['mapa']['url'],
-                  placeholder:
-                      Image.asset('assets/images/placeholder-image.png', fit: BoxFit.cover,),
+                  placeholder: Image.asset(
+                    'assets/images/placeholder-image.png',
+                    fit: BoxFit.cover,
+                  ),
                   fit: BoxFit.cover,
                   errorWidget: new Icon(Icons.error),
                 ),
@@ -248,7 +254,7 @@ class Sobre extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                      color: _cardHeaderColorFont),
                 ),
               )
             ]),
@@ -316,7 +322,7 @@ class Sobre extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                      color: _cardHeaderColorFont),
                 ),
               )
             ]),
@@ -389,7 +395,7 @@ class Sobre extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                            color: _cardHeaderColorFont),
                       ),
                     )
                   ],
@@ -422,14 +428,17 @@ class Sobre extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     final bloc = Provider.of(context);
+
+    if (isIOS) {
+      _cardHeaderColor = Theme.of(context).primaryColor;
+      _cardHeaderColorFont = Colors.black87;
+    }
 
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: new AppBar(
-        title: new Text('Sobre'),
-        backgroundColor: Theme.of(context).primaryColor,
-      ),
+      appBar: AppTabBar(title: Text('Sobre'), context: context,),
       body: StreamBuilder(
           stream: bloc.sobre,
           builder: (context, snapshot) {
