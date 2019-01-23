@@ -1,13 +1,12 @@
+import 'package:distrito_app/model/imagem.dart';
+import 'package:distrito_app/model/mensagem/autor.dart';
+import 'package:distrito_app/model/mensagem/mensagem.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:html2md/html2md.dart' as html2md;
 
-import 'package:distrito_app/model/mensagem/mensagem.dart';
-import 'package:distrito_app/widgets/app_tabbar.dart';
-import 'package:distrito_app/model/mensagem/autor.dart';
-import 'package:distrito_app/model/imagem.dart';
-import '../utils/functions.dart' as fn;
 import './image_wrapper.dart';
+import '../utils/functions.dart' as fn;
 
 class MensagemDetalhe extends StatelessWidget {
   MensagemDetalhe({this.msg});
@@ -28,9 +27,8 @@ class MensagemDetalhe extends StatelessWidget {
     } else {
       return Scaffold(
         resizeToAvoidBottomPadding: false,
-        appBar: AppTabBar(
+        appBar: AppBar(
           title: Text(msg.titulo),
-          context: context,
         ),
         body: new _pageItens(msg: msg, markdown: markdown),
       );

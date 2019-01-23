@@ -1,55 +1,38 @@
 import 'dart:collection';
-import 'dart:io' show Platform;
-import 'package:distrito_app/widgets/app_tabbar.dart';
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:distrito_app/model/imagem.dart';
+import 'package:distrito_app/pages/img_full.dart';
+import 'package:distrito_app/pages/pastor_detalhe.dart';
+import 'package:distrito_app/pages/restart_wdgt.dart';
+import 'package:distrito_app/utils/bloc.dart';
+import 'package:distrito_app/utils/bloc_provider.dart';
 import 'package:distrito_app/utils/custom_icons_icons.dart';
-import './img_full.dart';
-import '../utils/bloc.dart';
-import '../model/imagem.dart';
-import './pastor_detalhe.dart';
+import 'package:distrito_app/utils/globals.dart' as globals;
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class Contato {
-  String icone;
-  String nome;
-  String url;
-
-  Contato({this.icone, this.nome, this.url});
-
-  factory Contato.fromJson(Map<dynamic, dynamic> json) {
-    final icon = json['icone'];
-    return new Contato(
-      icone: icon['valor'],
-      nome: json['nome'],
-      url: json['url'],
-    );
-  }
-}
+import '../model/contato.dart';
 
 class Sobre extends StatelessWidget {
   Color _cardHeaderColor = Color(0xFF2F557F);
   Color _cardHeaderColorFont = Colors.white;
 
-  _launchMAPS(String lat, String long) async {
+  _launchMAPS(String lat, String long, {isIOS: false}) async {
     String appleUrl = 'http://maps.apple.com/?ll=${lat},${long}';
     String googleUrl =
         'https://www.google.com/maps/dir/?api=1&destination=${lat},${long}';
     String wazeUrl = 'https://waze.com/ul?ll=${lat},${long}&navigate=yes';
-    if (Platform.isAndroid && await canLaunch(googleUrl)) {
-      // print('launching com googleUrl'); // XXX:
+    if (!isIOS && await canLaunch(googleUrl)) {
       await launch(googleUrl);
-    } else if (Platform.isIOS && await canLaunch(appleUrl)) {
-      // print('launching apple url'); // XXX:
+    } else if (isIOS && await canLaunch(appleUrl)) {
       await launch(appleUrl);
     } else if (await canLaunch(wazeUrl)) {
-      // print('launching waze url'); // XXX:
       await launch(wazeUrl);
     } else {
-      // print(lat); // XXX:
-      // print(long); // XXX:
       print('Could not launch url');
     }
   }
@@ -96,15 +79,6 @@ class Sobre extends StatelessWidget {
     return iconeDinamico;
   }
 
-  // var arr = [];
-  // data.forEach((a, b) {
-  //   debugPrint('a $a');
-  //   debugPrint('b $b');
-  //   arr.add(b);
-  // });
-  // debugPrint(imagemFachada.url);
-  // data.values.map((i) => debugPrint(i));
-
   Widget topoSobreCard(BuildContext context, Imagem fachada) {
     return new Container(
       constraints: new BoxConstraints.expand(
@@ -112,7 +86,6 @@ class Sobre extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
-          // debugPrint('tap imagem sobre');
           Navigator.of(context).push(MaterialPageRoute<Null>(
             builder: (BuildContext context) {
               return ImageFullScreen(imagemUrl: fachada.url);
@@ -121,7 +94,6 @@ class Sobre extends StatelessWidget {
           ));
         },
         child: new Stack(fit: StackFit.expand, children: <Widget>[
-          // new Image.network(fachada.url, fit: BoxFit.cover),
           new CachedNetworkImage(
             imageUrl: fachada.url,
             placeholder: Image.asset(
@@ -174,15 +146,11 @@ class Sobre extends StatelessWidget {
     );
   }
 
-  // Widget getFachadaImg(BuildContext ctx, LinkedHashMap<String, dynamic> data) {
-  //   Imagem imagemFachada = Imagem.fromJson(data);
-  //   return Image.network(imagemFachada.url, fit: BoxFit.cover);
-  // }
-
-  Widget localizacaoSobreCard(sobreObj) {
+  Widget localizacaoSobreCard(sobreObj, {isIOS: false}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(6.0, 6.0, 6.0, 3.0),
       child: Card(
+        elevation: isIOS ? 1.0 : 2.0,
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -206,15 +174,11 @@ class Sobre extends StatelessWidget {
                   if (sobreObj['endereco']['coords']['lat'] != null &&
                       sobreObj['endereco']['coords']['long'] != null) {
                     _launchMAPS(sobreObj['endereco']['coords']['lat'],
-                        sobreObj['endereco']['coords']['long']);
+                        sobreObj['endereco']['coords']['long'],
+                        isIOS: isIOS);
                   }
                 },
-                child:
-                    // Image.network(
-                    //   sobreObj['endereco']['mapa']['url'],
-                    //   fit: BoxFit.cover,
-                    // ),
-                    CachedNetworkImage(
+                child: CachedNetworkImage(
                   imageUrl: sobreObj['endereco']['mapa']['url'],
                   placeholder: Image.asset(
                     'assets/images/placeholder-image.png',
@@ -249,10 +213,12 @@ class Sobre extends StatelessWidget {
     );
   }
 
-  Widget horariosCultosSobreCard(BuildContext context, sobreObj) {
+  Widget horariosCultosSobreCard(BuildContext context, sobreObj,
+      {isIOS: false}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(6.0, 3.0, 6.0, 3.0),
       child: Card(
+        elevation: isIOS ? 1.0 : 2.0,
         child: Column(children: <Widget>[
           Container(
             decoration: BoxDecoration(color: _cardHeaderColor),
@@ -317,10 +283,11 @@ class Sobre extends StatelessWidget {
     return arr;
   }
 
-  Widget contatosSobreCard(BuildContext context, sobreObj) {
+  Widget contatosSobreCard(BuildContext context, sobreObj, {isIOS: false}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(6.0, 3.0, 6.0, 3.0),
       child: Card(
+        elevation: isIOS ? 1.0 : 2.0,
         child: Column(children: <Widget>[
           Container(
             decoration: BoxDecoration(color: _cardHeaderColor),
@@ -343,7 +310,7 @@ class Sobre extends StatelessWidget {
               children: [
                 _contentContato(context, sobreObj['contato']),
               ],
-            ), // TODO:
+            ),
           ),
         ]),
       ),
@@ -365,7 +332,7 @@ class Sobre extends StatelessWidget {
             ),
             icon: Icon(_getIcon(contato.icone)),
             onPressed: () async {
-              print('${contato.url}');
+              // print('${contato.url}');
               if (await canLaunch('${contato.url}')) {
                 await launch('${contato.url}');
               }
@@ -381,10 +348,11 @@ class Sobre extends StatelessWidget {
     );
   }
 
-  Widget pastorSobreCard(BuildContext context, sobreObj) {
+  Widget pastorSobreCard(BuildContext context, sobreObj, {isIOS: false}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(6.0, 3.0, 6.0, 6.0),
       child: Card(
+        elevation: isIOS ? 1.0 : 2.0,
         child: GestureDetector(
           onTap: () {
             Navigator.push(
@@ -437,45 +405,95 @@ class Sobre extends StatelessWidget {
     );
   }
 
+  StreamBuilder<QuerySnapshot> _sobrePageItens(BlocDados bloc, {isIOS: false}) {
+    return StreamBuilder(
+        stream: bloc.sobre,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return LinearProgressIndicator();
+          }
+
+          var sobreObj = {};
+
+          snapshot.data.documents.forEach((DocumentSnapshot doc) async {
+            var docId = doc.documentID;
+            sobreObj[docId] = doc.data;
+          });
+          Imagem fachada = Imagem.fromJson(sobreObj['fachada']);
+
+          return ListView(children: <Widget>[
+            topoSobreCard(context, fachada),
+            localizacaoSobreCard(sobreObj, isIOS: isIOS),
+            horariosCultosSobreCard(context, sobreObj, isIOS: isIOS),
+            contatosSobreCard(context, sobreObj, isIOS: isIOS),
+            pastorSobreCard(context, sobreObj, isIOS: isIOS),
+          ]);
+        });
+  }
+
+  CupertinoPageScaffold _iosSobrePage(BuildContext context, BlocDados bloc) {
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text('Sobre'),
+        trailing: CupertinoButton(
+            color: Colors.transparent,
+            minSize: 35.0,
+            padding: EdgeInsets.all(0.0),
+            child: Icon(
+                IconData(0xf459,
+                    fontFamily: 'CupertinoIcons',
+                    fontPackage: 'cupertino_icons'),
+                size: 30.0),
+            onPressed: () {
+              _deletePrefs(context);
+            }),
+      ),
+      child: _sobrePageItens(bloc, isIOS: true),
+    );
+  }
+
+  _deletePrefs(BuildContext context) async {
+    print('_deletePrefs');
+    final SharedPreferences prefs = await globals.sprefs;
+    await prefs.remove('igreja');
+    return RestartWidget.restartApp(context);
+//    runApp(DistritoApp());
+//    Navigator.of(context).pushReplacement(MaterialPageRoute(
+//        builder: (context) => MyTabs(igreja: value.toString())));
+//    return ActionSheetIgreja();
+//    return "OK";
+  }
+
+  Scaffold _androidSobrePage(BuildContext context, BlocDados bloc) {
+    return new Scaffold(
+      resizeToAvoidBottomPadding: false,
+      appBar: AppBar(
+        title: Text('Sobre'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.account_balance), //TODO: escolher icon melhor
+            onPressed: () {
+              _deletePrefs(context);
+            },
+          ),
+        ],
+      ),
+      body: _sobrePageItens(bloc),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-    final bloc = Provider.of(context);
+    // final bloc = Provider.of(context);
+    final BlocDados bloc = BlocProvider.of<BlocDados>(context);
 
     if (isIOS) {
-      _cardHeaderColor = Theme.of(context).primaryColor;
-      _cardHeaderColorFont = Colors.black87;
+      _cardHeaderColor = CupertinoColors.inactiveGray;
+      _cardHeaderColorFont = Colors.white;
+      return _iosSobrePage(context, bloc);
+    } else {
+      return _androidSobrePage(context, bloc);
     }
-
-    return new Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: AppTabBar(
-        title: Text('Sobre'),
-        context: context,
-      ),
-      body: StreamBuilder(
-          stream: bloc.sobre,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return LinearProgressIndicator();
-            }
-
-            var sobreObj = {};
-
-            snapshot.data.documents.forEach((DocumentSnapshot doc) async {
-              var docId = doc.documentID;
-              sobreObj[docId] = doc.data;
-            });
-            Imagem fachada = Imagem.fromJson(sobreObj['fachada']);
-
-            return ListView(children: <Widget>[
-              topoSobreCard(context, fachada),
-              localizacaoSobreCard(sobreObj),
-              horariosCultosSobreCard(context, sobreObj),
-              contatosSobreCard(context, sobreObj),
-              pastorSobreCard(context, sobreObj),
-            ]);
-          }),
-    );
   }
 }

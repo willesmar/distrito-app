@@ -7,7 +7,6 @@ import '../utils/globals.dart' as globals;
 class ProgramaNotificationBloc implements BlocBase {
   bool _notificar;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  // Future<SharedPreferences> _sprefs = SharedPreferences.getInstance();
   final _notificarProgramaCtrl = BehaviorSubject<bool>();
   Stream<bool> get notificacaoPrgrm => _notificarProgramaCtrl.stream;
   Function(bool) get notificarPrgrm => _notificarProgramaCtrl.sink.add;

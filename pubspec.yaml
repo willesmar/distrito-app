@@ -48,6 +48,7 @@ flutter:
     - assets/images/pcalvarenga.jpg
     - assets/images/placeholder-image.png
     - assets/images/splash-bg.jpg
+    - assets/images/simbolo_iasd_nome.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

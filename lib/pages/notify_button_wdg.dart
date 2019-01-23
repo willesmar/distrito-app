@@ -17,11 +17,15 @@ class NotificarButtonWidget extends StatelessWidget {
         minSize: 35.0,
         padding: EdgeInsets.all(0.0),
         child: notify
-            ? Icon(IconData(0xf39b,
-                fontFamily: 'CupertinoIcons', fontPackage: 'cupertino_icons'),
+            ? Icon(
+                IconData(0xf39b,
+                    fontFamily: 'CupertinoIcons',
+                    fontPackage: 'cupertino_icons'),
                 size: 30.0)
-            : Icon(IconData(0xf39a,
-                fontFamily: 'CupertinoIcons', fontPackage: 'cupertino_icons'),
+            : Icon(
+                IconData(0xf39a,
+                    fontFamily: 'CupertinoIcons',
+                    fontPackage: 'cupertino_icons'),
                 size: 30.0),
         onPressed: () {
           _notify = !_notify;
@@ -31,6 +35,7 @@ class NotificarButtonWidget extends StatelessWidget {
     }
 
     Widget _androidButton(bool notify) {
+      print('_androidButton');
       return IconButton(
         icon: notify
             ? Icon(Icons.notifications_active)
@@ -47,12 +52,14 @@ class NotificarButtonWidget extends StatelessWidget {
       initialData: false,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.hasData) {
+          print('hasData');
           _notify = snapshot?.data;
+          print(_notify);
+          return isIOS ? _iosButton(_notify) : _androidButton(_notify);
+        } else {
+          _notify = false;
           return isIOS ? _iosButton(_notify) : _androidButton(_notify);
         }
-        return Container(
-          color: Colors.greenAccent,
-        );
       },
     );
   }

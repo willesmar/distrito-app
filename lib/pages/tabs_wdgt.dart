@@ -1,27 +1,23 @@
-import 'package:distrito_app/model/push_notification.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:distrito_app/utils/custom_icons_icons.dart';
-import 'dart:math' as math;
 import 'dart:async';
 
-import '../utils/globals.dart' as globals;
+import 'package:distrito_app/model/push_notification.dart';
+import 'package:distrito_app/utils/bloc_provider.dart';
+import 'package:distrito_app/utils/custom_icons_icons.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import './anuncios.dart';
+import './msgs.dart';
+import './programa.dart';
+import './sobre.dart';
 import '../utils/bloc.dart';
-import './msgs.dart' as mensagens;
-import './anuncios.dart' as anuncios;
-import './programa.dart' as programa;
-import './sobre.dart' as sobre;
-// import './crm.dart' as crm;
+// import './crm.dart';
 
 class MyTabs extends StatefulWidget {
   final String igreja;
-  // Bloc bloc;
 
   MyTabs({this.igreja});
-  //  {
-  //   this.bloc = Bloc();
-  // }
 
   @override
   MyTabsState createState() => new MyTabsState();
@@ -36,14 +32,12 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    debugPrint(widget.igreja);
+//    debugPrint(widget.igreja);
     controller = new TabController(vsync: this, length: 4);
     _firebaseMessaging.requestNotificationPermissions(
         const IosNotificationSettings(sound: true, badge: true, alert: true));
     _firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {
-      print("Settings registered: $settings");
-    });
+        .listen((IosNotificationSettings settings) {});
     _firebaseMessaging.getToken().then((String token) {
       assert(token != null);
       setState(() {
@@ -61,10 +55,12 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-  Provider _iosTabs(BuildContext context) {
-    return Provider(
+  BlocProvider _iosTabs(BuildContext context) {
+    return BlocProvider<BlocDados>(
+      bloc: BlocDados(),
       child: CupertinoTabScaffold(
         tabBar: CupertinoTabBar(
+          iconSize: 24.0,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(IconData(0xf42e,
@@ -98,28 +94,28 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
             case 0:
               return CupertinoTabView(
                 builder: (BuildContext context) {
-                  return new mensagens.Mensagens();
+                  return new Mensagens();
                 },
               );
               break;
             case 1:
               return CupertinoTabView(
                 builder: (BuildContext context) {
-                  return new anuncios.Anuncios();
+                  return new Anuncios();
                 },
               );
               break;
             case 2:
               return CupertinoTabView(
                 builder: (BuildContext context) {
-                  return new programa.Programa();
+                  return new Programa();
                 },
               );
               break;
             case 3:
               return CupertinoTabView(
                 builder: (BuildContext context) {
-                  return new sobre.Sobre();
+                  return new Sobre();
                 },
               );
               break;
@@ -129,8 +125,9 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
     );
   }
 
-  Provider _androidTabs(BuildContext context) {
-    return Provider(
+  BlocProvider _androidTabs(BuildContext context) {
+    return BlocProvider<BlocDados>(
+      bloc: BlocDados(),
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         bottomNavigationBar: new Material(
@@ -172,11 +169,11 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
         body: new TabBarView(
           controller: controller,
           children: <Widget>[
-            new mensagens.Mensagens(),
-            // new crm.ComunhaoRelacionamentoMissao(),
-            new anuncios.Anuncios(),
-            new programa.Programa(),
-            new sobre.Sobre(),
+            new Mensagens(),
+            // new ComunhaoRelacionamentoMissao(),
+            new Anuncios(),
+            new Programa(),
+            new Sobre(),
           ],
         ),
       ),
@@ -186,54 +183,27 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-    // final bloc = Provider.of(context);
-    // bloc.igreja.listen((hasIgreja) async {
-    //   print('Igreja => $hasIgreja');
-    //   if (hasIgreja.length < 1) {
-    //     await selecionarIgrejaModal(context);
-    //   }
-    // });
-    // onMessage: {
-    //   notification: {
-    //     title: Titulo 3 teste,
-    //     body: Mensagem de teste distrito app
-    //     },
-    //   data: {
-    //     key: value,
-    //     canal: comunicacao
-    //   }
-    // }
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         PushNotification pushMessage = PushNotification.fromJson(message);
-        // print("onMessage: $message");
-        // _showItemDialog(message);
         showPushNotification(context, pushMessage);
       },
       onLaunch: (Map<String, dynamic> message) async {
-        // print("onLaunch: $message");
-        // _navigateToItemDetail(message);
         PushNotification pushMessage = PushNotification.fromJson(message);
         showPushNotification(context, pushMessage);
-        // controller.animateTo(2);
       },
       onResume: (Map<String, dynamic> message) async {
-        // print("onResume: $message");
         PushNotification pushMessage = PushNotification.fromJson(message);
         showPushNotification(context, pushMessage);
-        // controller.animateTo(3);
-        // _navigateToItemDetail(message);
       },
     );
 
-    if (widget.igreja.isEmpty) {
-      selecionarIgrejaModal(context);
-    } else if (widget.igreja.isNotEmpty) {
-      globals.igreja = widget.igreja;
-    }
-    // widget.bloc.igreja.listen((hasIgreja) async {
-    //   print('Igreja => $hasIgreja');
-    // });
+    // if (widget.igreja.isEmpty) {
+    //   selecionarIgrejaModal(context);
+    // } else if (widget.igreja.isNotEmpty) {
+    //   globals.igreja = widget.igreja;
+    // }
+
     if (isIOS) {
       return _iosTabs(context);
     } else {
@@ -270,7 +240,8 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
   }
 
   Future selecionarIgrejaModal(BuildContext context) async {
-    final bloc = Provider.of(context);
+    // final bloc = Provider.of(context);
+    final BlocDados bloc = BlocProvider.of<BlocDados>(context);
     await showDialog<String>(
         context: context,
         builder: (BuildContext context) {

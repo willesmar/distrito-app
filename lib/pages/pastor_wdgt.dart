@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class PastorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     return StreamBuilder(
       stream: Firestore.instance.document('sobre/pastor').snapshots(),
       builder: (context, snapshot) {
@@ -12,6 +13,7 @@ class PastorCard extends StatelessWidget {
           return LinearProgressIndicator();
         }
         return Card(
+          elevation: isIOS ? 1.0 : 2.0,
           child: GestureDetector(
             onTap: () {
               Navigator.push(

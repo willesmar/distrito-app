@@ -1,9 +1,8 @@
+import 'package:distrito_app/utils/functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'package:distrito_app/widgets/app_tabbar.dart';
 import 'package:html2md/html2md.dart' as html2md;
-import 'package:distrito_app/utils/functions.dart';
+
 import './image_wrapper.dart';
 
 class AnuncioDetalhe extends StatelessWidget {
@@ -131,18 +130,18 @@ class AnuncioDetalhe extends StatelessWidget {
   Widget _iosAnuncioPageDetail(BuildContext context, String descricaoMarkdown) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-          middle: Text(document['nome']),
-        ),
-      child: Material(child: _anuncioDetailItens(descricaoMarkdown)),);
+        middle: Text(document['nome']),
+      ),
+      child: Material(child: _anuncioDetailItens(descricaoMarkdown)),
+    );
   }
 
   Widget _androidAnuncioPageDetail(
       BuildContext context, String descricaoMarkdown) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppTabBar(
+      appBar: AppBar(
         title: Text(document['nome']),
-        context: context,
       ),
       body: _anuncioDetailItens(descricaoMarkdown),
     );

@@ -1,102 +1,124 @@
-import 'package:distrito_app/widgets/app_tabbar.dart';
-import 'package:flutter/material.dart';
-import 'package:distrito_app/model/mensagem/autor.dart';
-import 'package:html2md/html2md.dart' as html2md;
 import 'package:cached_network_image/cached_network_image.dart';
-import '../utils/functions.dart' as fn;
 import 'package:distrito_app/model/imagem.dart';
+import 'package:distrito_app/model/mensagem/autor.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:html2md/html2md.dart' as html2md;
+
 import './img_full.dart';
+import '../utils/functions.dart' as fn;
 
 class PastorDetalhe extends StatelessWidget {
   final document;
 
   PastorDetalhe({this.document});
 
+  ListView _pastorDetalheItens(BuildContext context, String markdown) {
+    return new ListView(
+      children: <Widget>[
+        new Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Container(
+              constraints: new BoxConstraints.expand(
+                height: 350.0,
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute<Null>(
+                    builder: (BuildContext context) {
+                      return ImageFullScreen(
+                          imagemUrl: document['foto']['url']);
+                    },
+                    fullscreenDialog: true,
+                  ));
+                },
+                child: new Stack(fit: StackFit.expand, children: <Widget>[
+                  CachedNetworkImage(
+                    imageUrl: document['foto']['url'],
+                    placeholder:
+                        Image.asset('assets/images/placeholder-image.png'),
+                    fit: BoxFit.cover,
+                    errorWidget: new Icon(Icons.error),
+                  ),
+                  Positioned(
+                    left: 0.0,
+                    right: 0.0,
+                    bottom: 0.0,
+                    child: new Container(
+                      decoration: new BoxDecoration(
+                        gradient: new LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.8),
+                            ]),
+                      ),
+                      padding: const EdgeInsets.all(18.0),
+                      child: new Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          new Expanded(
+                            child: new Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                new Text(
+                                  '${document['nome']}',
+                                  style: new TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 25.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ]),
+              ),
+            ),
+            new ShowBiografia(markdown: markdown),
+          ],
+        ),
+      ],
+    );
+  }
+
+  _iosPastorDetalhe(BuildContext context, String markdown) {
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text('Programação'),
+      ),
+      child: _pastorDetalheItens(context, markdown),
+    );
+  }
+
+  Scaffold _androidPastorDetalhe(BuildContext context, String markdown) {
+    return Scaffold(
+      resizeToAvoidBottomPadding: false,
+      appBar: AppBar(
+        title: Text('Nosso Pastor'),
+      ),
+      body: _pastorDetalheItens(context, markdown),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     String biografia = document['biografia'].toString();
     String markdown = html2md.convert(biografia);
-
-    return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: AppTabBar(title: Text('Nosso Pastor'), context: context,),
-      body: new ListView(
-        children: <Widget>[
-          new Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Container(
-                constraints: new BoxConstraints.expand(
-                  height: 350.0,
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    debugPrint('tap imagem sobre');
-                    Navigator.of(context).push(MaterialPageRoute<Null>(
-                      builder: (BuildContext context) {
-                        return ImageFullScreen(
-                            imagemUrl: document['foto']['url']);
-                      },
-                      fullscreenDialog: true,
-                    ));
-                  },
-                  child: new Stack(fit: StackFit.expand, children: <Widget>[
-                    // Image.network(document['foto']['url'], fit: BoxFit.cover),
-                    CachedNetworkImage(
-                      imageUrl: document['foto']['url'],
-                      placeholder:
-                          Image.asset('assets/images/placeholder-image.png'),
-                      fit: BoxFit.cover,
-                      errorWidget: new Icon(Icons.error),
-                    ),
-                    Positioned(
-                      left: 0.0,
-                      right: 0.0,
-                      bottom: 0.0,
-                      child: new Container(
-                        decoration: new BoxDecoration(
-                          gradient: new LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.transparent,
-                                Colors.black.withOpacity(0.8),
-                              ]),
-                        ),
-                        padding: const EdgeInsets.all(18.0),
-                        child: new Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: <Widget>[
-                            new Expanded(
-                              child: new Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  new Text(
-                                    '${document['nome']}',
-                                    style: new TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ]),
-                ),
-              ),
-              new ShowBiografia(markdown: markdown),
-            ],
-          ),
-        ],
-      ),
-    );
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    if (isIOS) {
+      return _iosPastorDetalhe(context, markdown);
+    } else {
+      return _androidPastorDetalhe(context, markdown);
+    }
   }
 }
 

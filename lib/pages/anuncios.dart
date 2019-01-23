@@ -1,14 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:distrito_app/utils/bloc_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:html2md/html2md.dart' as html2md;
-import 'package:cached_network_image/cached_network_image.dart';
 
-import 'package:distrito_app/widgets/app_tabbar.dart';
-import '../utils/functions.dart' as fn;
 import './anuncio_detalhe.dart';
 import '../utils/bloc.dart';
+import '../utils/functions.dart' as fn;
 
 class Anuncios extends StatefulWidget {
   @override
@@ -145,7 +144,8 @@ class AnunciosState extends State<Anuncios> {
     );
   }
 
-  StreamBuilder<QuerySnapshot> _anunciosPageItens(Bloc bloc, {isIOS: false}) {
+  StreamBuilder<QuerySnapshot> _anunciosPageItens(BlocDados bloc,
+      {isIOS: false}) {
     return new StreamBuilder(
       stream: bloc.anuncios,
       builder: (context, snapshot) {
@@ -164,7 +164,7 @@ class AnunciosState extends State<Anuncios> {
     );
   }
 
-  _iosAnuncioPage(BuildContext context, Bloc bloc, {isIOS: false}) {
+  _iosAnuncioPage(BuildContext context, BlocDados bloc, {isIOS: false}) {
     return CupertinoPageScaffold(
       backgroundColor: Colors.grey[50],
       navigationBar: CupertinoNavigationBar(
@@ -174,12 +174,11 @@ class AnunciosState extends State<Anuncios> {
     );
   }
 
-  Widget _androidAnuncioPage(BuildContext context, Bloc bloc) {
+  Widget _androidAnuncioPage(BuildContext context, BlocDados bloc) {
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppTabBar(
+      appBar: AppBar(
         title: Text('Comunicação'),
-        context: context,
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(6.0, 3.0, 6.0, 3.0),
@@ -190,7 +189,7 @@ class AnunciosState extends State<Anuncios> {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = Provider.of(context);
+    final BlocDados bloc = BlocProvider.of<BlocDados>(context);
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     if (isIOS) {

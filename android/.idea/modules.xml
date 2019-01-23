@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file:///Volumes/SD128MAC/Dev/distrito-app/android/android.iml" filepath="/Volumes/SD128MAC/Dev/distrito-app/android/android.iml" />
+      <module fileurl="file:///Volumes/SD128MAC/Dev/distrito-app/android/app/app.iml" filepath="/Volumes/SD128MAC/Dev/distrito-app/android/app/app.iml" />
+      <module fileurl="file://$USER_HOME$/dev-tools/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-0.8.2+3/android/cloud_firestore.iml" filepath="$USER_HOME$/dev-tools/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-0.8.2+3/android/cloud_firestore.iml" />
+      <module fileurl="file://$USER_HOME$/dev-tools/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-0.2.5+1/android/firebase_core.iml" filepath="$USER_HOME$/dev-tools/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-0.2.5+1/android/firebase_core.iml" />
+      <module fileurl="file://$USER_HOME$/dev-tools/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-2.1.0/android/firebase_messaging.iml" filepath="$USER_HOME$/dev-tools/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-2.1.0/android/firebase_messaging.iml" />
+      <module fileurl="file://$USER_HOME$/dev-tools/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_custom_tabs-0.3.0/android/flutter_custom_tabs.iml" filepath="$USER_HOME$/dev-tools/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_custom_tabs-0.3.0/android/flutter_custom_tabs.iml" />
+      <module fileurl="file://$USER_HOME$/dev-tools/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-0.4.1/android/path_provider.iml" filepath="$USER_HOME$/dev-tools/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-0.4.1/android/path_provider.iml" />
+      <module fileurl="file://$USER_HOME$/dev-tools/flutter/.pub-cache/hosted/pub.dartlang.org/screen-0.0.4/android/screen.iml" filepath="$USER_HOME$/dev-tools/flutter/.pub-cache/hosted/pub.dartlang.org/screen-0.0.4/android/screen.iml" />
+      <module fileurl="file://$USER_HOME$/dev-tools/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.4.3/android/shared_preferences.iml" filepath="$USER_HOME$/dev-tools/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.4.3/android/shared_preferences.iml" />
+      <module fileurl="file://$USER_HOME$/dev-tools/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-3.0.3/android/url_launcher.iml" filepath="$USER_HOME$/dev-tools/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-3.0.3/android/url_launcher.iml" />
+      <module fileurl="file://$USER_HOME$/dev-tools/flutter/.pub-cache/hosted/pub.dartlang.org/video_player-0.6.5/android/video_player.iml" filepath="$USER_HOME$/dev-tools/flutter/.pub-cache/hosted/pub.dartlang.org/video_player-0.6.5/android/video_player.iml" />
+    </modules>
+  </component>
+</project>

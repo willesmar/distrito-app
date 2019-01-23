@@ -4,13 +4,12 @@ import 'package:distrito_app/model/programa.dart';
 import 'package:distrito_app/pages/notify_button_wdg.dart';
 import 'package:distrito_app/utils/bloc_provider.dart';
 import 'package:distrito_app/utils/programa_notification_bloc.dart';
-import 'package:distrito_app/widgets/app_tabbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:screen/screen.dart';
 
-import '../utils/functions.dart' as fn;
 import '../utils/bloc.dart';
+import '../utils/functions.dart' as fn;
 
 // TODO: titulo com nome do programa, data completa abaixo OK
 // TODO: aba/collapse de escala OK
@@ -33,13 +32,13 @@ class ProgramaState extends State<Programa> {
     _scrollViewController = new ScrollController();
     _toggle = false;
     _corCirculoTimeline = Color(0xFFA7B9D1);
-    // Screen.keepOn(true);
+    Screen.keepOn(true);
   }
 
   @override
   void dispose() {
-    _scrollViewController.dispose();
     Screen.keepOn(false);
+    _scrollViewController.dispose();
     _toggle = false;
     _corCirculoTimeline = Color(0xFFA7B9D1);
     super.dispose();
@@ -110,7 +109,7 @@ class ProgramaState extends State<Programa> {
     }
     integrantes.forEach((integrante) {
       listaEscala.add(Material(
-              child: Chip(
+        child: Chip(
           label: Text(
             integrante,
             style: TextStyle(fontWeight: FontWeight.w600),
@@ -120,9 +119,9 @@ class ProgramaState extends State<Programa> {
       ));
     });
     return Material(
-          child: ListTile(
+      child: ListTile(
         title: Padding(
-          padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+          padding: const EdgeInsets.fromLTRB(8.0, 2.0, 8.0, 2.0),
           child: Text(ministerio),
         ),
         subtitle: Wrap(
@@ -134,7 +133,8 @@ class ProgramaState extends State<Programa> {
     );
   }
 
-  Widget _generateListCards(BuildContext context, ProgramaModel prgrm, {isIOS: false}) {
+  Widget _generateListCards(BuildContext context, ProgramaModel prgrm,
+      {isIOS: false}) {
     List<Widget> listaPrograma = [];
     Map<dynamic, dynamic> escala = prgrm.equipes;
     num louvorSize = prgrm.louvor.length;
@@ -145,7 +145,7 @@ class ProgramaState extends State<Programa> {
 
     listaPrograma.add(
       Material(
-              child: Container(
+        child: Container(
           decoration: BoxDecoration(color: isIOS ? Colors.grey[200] : topColor),
           padding: EdgeInsets.only(top: 8.0),
           child: ListTile(
@@ -179,8 +179,9 @@ class ProgramaState extends State<Programa> {
         listaEscala.add(makeEscala(key, integrantes));
       });
       listaPrograma.add(Material(
-              child: Container(
-            decoration: BoxDecoration(color: isIOS ? Colors.grey[200] : topColor),
+        child: Container(
+            decoration:
+                BoxDecoration(color: isIOS ? Colors.grey[200] : topColor),
             child: ExpansionTile(
               initiallyExpanded: false,
               backgroundColor: isIOS ? Colors.grey[100] : topColor,
@@ -226,7 +227,7 @@ class ProgramaState extends State<Programa> {
           .addAll(_makeAtividade(prgrm.culto, grupoAtividade: 'Culto'));
     }
     return Material(
-          child: Column(
+      child: Column(
         children: listaPrograma,
       ),
     );
@@ -286,9 +287,10 @@ class ProgramaState extends State<Programa> {
                 flex: 2,
                 // fit: FlexFit.tight,
                 child: Container(
-                  color: isIOS
-                      ? Colors.grey[400]
-                      : Color(0xFF3E8391).withOpacity(0.7),
+                  color: Color(0xFF3E8391).withOpacity(0.3),
+                  // color: isIOS
+                  //     ? Colors.grey[400]
+                  //     : Color(0xFF3E8391).withOpacity(0.7),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -298,7 +300,7 @@ class ProgramaState extends State<Programa> {
                           children: [
                             Container(
                               child:
-                                  Icon(_icone, color: Colors.white, size: 26.0),
+                                  Icon(_icone, color: Colors.black, size: 26.0),
                             ),
                           ],
                         ),
@@ -319,7 +321,7 @@ class ProgramaState extends State<Programa> {
                                     fontFamily: 'Digital-7',
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.w500,
-                                    color: Colors.white,
+                                    color: Colors.black,
                                   ),
                                   maxLines: 1,
                                 ),
@@ -535,7 +537,8 @@ class ProgramaState extends State<Programa> {
     return Container();
   }
 
-  StreamBuilder<QuerySnapshot> _programaPageListItens(Bloc bloc, {isIOS: false}) {
+  StreamBuilder<QuerySnapshot> _programaPageListItens(BlocDados bloc,
+      {isIOS: false}) {
     return StreamBuilder(
       stream: bloc.programas,
       builder: (context, snapshot) {
@@ -545,10 +548,9 @@ class ProgramaState extends State<Programa> {
         return ListView.builder(
             itemCount: 1,
             itemBuilder: (context, index) {
-              return _generateListCards(
-                  context,
-                  ProgramaModel.fromJson(
-                      snapshot.data.documents.first.data), isIOS: isIOS);
+              return _generateListCards(context,
+                  ProgramaModel.fromJson(snapshot.data.documents.first.data),
+                  isIOS: isIOS);
             });
       },
     );
@@ -557,16 +559,23 @@ class ProgramaState extends State<Programa> {
   BlocProvider<ProgramaNotificationBloc> _makeProgramaNotificationSubs() {
     return BlocProvider<ProgramaNotificationBloc>(
       bloc: ProgramaNotificationBloc(),
-      child: Material(
-              child: Padding(
-          padding: const EdgeInsets.only(right: 8.0),
-          child: NotificarButtonWidget(),
-        ),
+      child: Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: NotificarButtonWidget(),
       ),
     );
   }
 
-  CupertinoPageScaffold _iosProgramaPage(BuildContext context, Bloc bloc) {
+  BlocProvider<ProgramaNotificationBloc> _makeAndroidProgramaNotificationSubs() {
+    return BlocProvider<ProgramaNotificationBloc>(
+      bloc: ProgramaNotificationBloc(),
+      child: Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: NotificarButtonWidget(),
+      )    );
+  }
+
+  CupertinoPageScaffold _iosProgramaPage(BuildContext context, BlocDados bloc) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text('Programação'),
@@ -576,15 +585,12 @@ class ProgramaState extends State<Programa> {
     );
   }
 
-  Scaffold _androidProgramaPage(BuildContext context, Bloc bloc) {
+  Scaffold _androidProgramaPage(BuildContext context, BlocDados bloc) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppTabBar(
-          title: Text('Programação'),
-          context: context,
-          actions: <Widget>[
-            _makeProgramaNotificationSubs(),
-          ]),
+      appBar: AppBar(title: Text('Programação'), actions: <Widget>[
+        _makeAndroidProgramaNotificationSubs(),
+      ]),
       body: _programaPageListItens(bloc),
     );
   }
@@ -592,7 +598,7 @@ class ProgramaState extends State<Programa> {
   @override
   Widget build(BuildContext context) {
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-    final bloc = Provider.of(context);
+    final BlocDados bloc = BlocProvider.of<BlocDados>(context);
     Screen.keepOn(true);
     if (isIOS) {
       return _iosProgramaPage(context, bloc);

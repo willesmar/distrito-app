@@ -1,10 +1,12 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:rxdart/rxdart.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:distrito_app/utils/bloc_provider.dart';
+import 'package:rxdart/rxdart.dart';
+
 import '../utils/globals.dart' as globals;
 
-class Bloc {
+class BlocDados implements BlocBase {
   // extends Object with ValidatorsExample
   // final _mensagemController = StreamController<dynamic>.broadcast();
   final _igrejaCtrl = BehaviorSubject<String>();
@@ -46,7 +48,7 @@ class Bloc {
       .collection('sobre')
       .snapshots();
 
-  Bloc() {
+  BlocDados() {
     selecionarIgreja('');
     // notificacaoPrgrm.listen(onData) XXX: put on shared_preferences
     // notificarPrgrm(true);
@@ -65,30 +67,30 @@ class Bloc {
 // final bloc = Bloc();
 
 //////
-class Provider extends InheritedWidget {
-  // Usar outro arquivo
-  final bloc;
+// class Provider extends InheritedWidget {
+//   // Usar outro arquivo
+//   final bloc;
 
-  Provider({Key key, Widget child})
-      : bloc = Bloc(),
-        super(key: key, child: child);
+//   Provider({Key key, Widget child})
+//       : bloc = Bloc(),
+//         super(key: key, child: child);
 
-  @override
-  bool updateShouldNotify(InheritedWidget oldWidget) => true;
+//   @override
+//   bool updateShouldNotify(InheritedWidget oldWidget) => true;
 
-  static Bloc of(BuildContext context) {
-    return (context.inheritFromWidgetOfExactType(Provider) as Provider).bloc;
-  }
-}
+//   static Bloc of(BuildContext context) {
+//     return (context.inheritFromWidgetOfExactType(Provider) as Provider).bloc;
+//   }
+// }
 
-/////////
-class ValidatorsExample {
-  // Usar outro arquivo
-  final validateEmail = StreamTransformer<String, dynamic>.fromHandlers(
-      handleData: (email, sink) {
-    if (email.contains('@'))
-      sink.add(email);
-    else
-      sink.addError('Enter a valid email');
-  });
-}
+// /////////
+// class ValidatorsExample {
+//   // Usar outro arquivo
+//   final validateEmail = StreamTransformer<String, dynamic>.fromHandlers(
+//       handleData: (email, sink) {
+//     if (email.contains('@'))
+//       sink.add(email);
+//     else
+//       sink.addError('Enter a valid email');
+//   });
+// }

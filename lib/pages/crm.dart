@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:distrito_app/utils/bloc_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -22,7 +23,7 @@ class ComunhaoRelacionamentoMissao extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = Provider.of(context);
+    final BlocDados bloc = BlocProvider.of<BlocDados>(context);
     bloc.igreja.listen((data) => debugPrint('Igreja selecionada: $data'));
     // final msgs = this.msgBloc.mensagens;
     // msgs.listen((data) {

@@ -1,19 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
-
 import 'package:distrito_app/model/mensagem/mensagem.dart';
-import 'package:distrito_app/widgets/app_tabbar.dart';
-import '../utils/globals.dart' as globals;
-import './msg_detalhe.dart';
-import '../utils/bloc.dart';
+import 'package:distrito_app/pages/msg_detalhe.dart';
+import 'package:distrito_app/utils/bloc.dart';
+import 'package:distrito_app/utils/bloc_provider.dart';
+import 'package:distrito_app/utils/globals.dart' as globals;
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-// TODO: tipos de midia: imagem, video
+// TODO: tipos de mídia: imagem, video
 class Mensagens extends StatelessWidget {
   Future selecionarIgrejaModal(BuildContext context) async {
-    final bloc = Provider.of(context);
+    final BlocDados bloc = BlocProvider.of<BlocDados>(context);
     await showDialog<String>(
         context: context,
         builder: (BuildContext context) {
@@ -211,7 +210,7 @@ class Mensagens extends StatelessWidget {
     );
   }
 
-  Widget _iosMsgPg(BuildContext context, Bloc bloc) {
+  Widget _iosMsgPg(BuildContext context, BlocDados bloc) {
     return CupertinoPageScaffold(
       backgroundColor: Colors.grey[50],
       navigationBar: CupertinoNavigationBar(
@@ -227,19 +226,19 @@ class Mensagens extends StatelessWidget {
               itemCount: snapshot.data.documents.length,
               itemBuilder: (context, index) {
                 return _buildListItem(context,
-                    new Mensagem.fromJson(snapshot.data.documents[index].data), isIOS: true);
+                    new Mensagem.fromJson(snapshot.data.documents[index].data),
+                    isIOS: true);
               });
         },
       ),
     );
   }
 
-  Scaffold _androidMsgPg(BuildContext context, Bloc bloc) {
+  Scaffold _androidMsgPg(BuildContext context, BlocDados bloc) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppTabBar(
+      appBar: AppBar(
         title: Text('Mensagens'),
-        context: context,
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0.0, 3.0, 0.0, 3.0),
@@ -266,7 +265,7 @@ class Mensagens extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-    final bloc = Provider.of(context);
+    final BlocDados bloc = BlocProvider.of<BlocDados>(context);
 
     if (globals.igreja.isEmpty) {
       selecionarIgrejaModal(context);
@@ -288,7 +287,7 @@ class Mensagens extends StatelessWidget {
 
 class CustomCard extends StatelessWidget {
   Future selecionarIgrejaModal(BuildContext context) async {
-    final bloc = Provider.of(context);
+    final BlocDados bloc = BlocProvider.of<BlocDados>(context);
     await showDialog<String>(
         context: context,
         builder: (BuildContext context) {
