@@ -24,7 +24,8 @@ class ProgramaState extends State<Programa> {
   ScrollController _scrollViewController;
   bool _toggle = false;
   Color _corCirculoTimeline = Color(0xFFA7B9D1);
-  Color topColor = Color(0xFF2F557F);
+  Color _topColor = Colors.blueGrey[200]; //Color(0xFF2F557F);
+  Color _fontTopColor = Colors.black87;
 
   @override
   void initState() {
@@ -56,16 +57,16 @@ class ProgramaState extends State<Programa> {
 
     if (grupoAtividade != null) {
       listaRetornada.add(Container(
-          decoration: BoxDecoration(color: isIOS ? Colors.grey[200] : topColor),
+          decoration: BoxDecoration(color: _topColor),
           child: ExpansionTile(
             initiallyExpanded: true,
-            backgroundColor: isIOS ? Colors.grey[200] : topColor,
+            backgroundColor: _topColor,
             title: Text(
               grupoAtividade.toString(),
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20.0,
-                  color: isIOS ? Colors.grey[900] : Colors.white),
+                  color: _fontTopColor),
             ),
             children: listaAtividade.toList(),
           )));
@@ -114,7 +115,7 @@ class ProgramaState extends State<Programa> {
             integrante,
             style: TextStyle(fontWeight: FontWeight.w600),
           ),
-          backgroundColor: Color(0xFF3E8391).withOpacity(0.3),
+          backgroundColor: _topColor.withOpacity(0.3),
         ),
       ));
     });
@@ -146,7 +147,7 @@ class ProgramaState extends State<Programa> {
     listaPrograma.add(
       Material(
         child: Container(
-          decoration: BoxDecoration(color: isIOS ? Colors.grey[200] : topColor),
+          decoration: BoxDecoration(color: _topColor),
           padding: EdgeInsets.only(top: 8.0),
           child: ListTile(
             dense: true,
@@ -156,7 +157,7 @@ class ProgramaState extends State<Programa> {
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 24.0,
-                    color: isIOS ? Colors.grey[900] : Colors.white),
+                    color: _fontTopColor),
               ),
             ),
             subtitle: Center(
@@ -164,7 +165,7 @@ class ProgramaState extends State<Programa> {
                 fn.dataCompleta(prgrm.timestamp),
                 style: new TextStyle(
                     fontSize: 16.0,
-                    color: isIOS ? Colors.grey[900] : Colors.white),
+                    color: _fontTopColor),
               ),
             ),
           ),
@@ -181,16 +182,16 @@ class ProgramaState extends State<Programa> {
       listaPrograma.add(Material(
         child: Container(
             decoration:
-                BoxDecoration(color: isIOS ? Colors.grey[200] : topColor),
+                BoxDecoration(color: _topColor),
             child: ExpansionTile(
               initiallyExpanded: false,
-              backgroundColor: isIOS ? Colors.grey[100] : topColor,
+              backgroundColor: _topColor,
               title: Text(
                 'Escalas',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0,
-                    color: isIOS ? Colors.grey[900] : Colors.white),
+                    color: _fontTopColor),
               ),
               children: <Widget>[
                 Container(
@@ -233,13 +234,37 @@ class ProgramaState extends State<Programa> {
     );
   }
 
+  // IconData _getIcon(String icone) {
+  //   switch (icone) {
+  //     case 'musical-notes':
+  //       return Icons.music_note;
+  //       break;
+  //     case 'musical-note':
+  //       return Icons.music_note;
+  //       break;
+  //     case 'microphone':
+  //       return Icons.mic;
+  //       break;
+  //     case 'film':
+  //       return Icons.ondemand_video;
+  //       break;
+  //     case 'people':
+  //       return Icons.person;
+  //       break;
+  //     case 'person':
+  //       return Icons.person;
+  //       break;
+  //     default:
+  //       return Icons.announcement;
+  //   }
+  // }
   IconData _getIcon(String icone) {
     switch (icone) {
       case 'musical-notes':
-        return Icons.music_note;
+        return IconData(0xe900, fontFamily: 'icomoon');
         break;
       case 'musical-note':
-        return Icons.music_note;
+        return IconData(0xe911, fontFamily: 'icomoon'); // e900
         break;
       case 'microphone':
         return Icons.mic;
@@ -248,10 +273,25 @@ class ProgramaState extends State<Programa> {
         return Icons.ondemand_video;
         break;
       case 'people':
-        return Icons.person;
+        return IconData(0xe90a, fontFamily: 'icomoon');
         break;
       case 'person':
         return Icons.person;
+        break;
+      case 'praying-hands':
+        return IconData(0xe904, fontFamily: 'icomoon');
+        break;
+      case 'bullhorn':
+        return IconData(0xe901, fontFamily: 'icomoon');
+        break;
+      case 'bible':
+        return IconData(0xe905, fontFamily: 'icomoon');
+        break;
+      case 'cross':
+        return IconData(0xe908, fontFamily: 'icomoon');
+        break;
+      case 'church':
+        return IconData(0xe906, fontFamily: 'icomoon');
         break;
       default:
         return Icons.announcement;
@@ -275,32 +315,28 @@ class ProgramaState extends State<Programa> {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
         child: Card(
-          color: Colors.grey[100],
+          color: Colors.grey[50],
           clipBehavior: Clip.antiAlias,
           elevation: isIOS ? 0.3 : 2.0,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Flexible(
-                flex: 2,
-                // fit: FlexFit.tight,
-                child: Container(
-                  color: Color(0xFF3E8391).withOpacity(0.3),
-                  // color: isIOS
-                  //     ? Colors.grey[400]
-                  //     : Color(0xFF3E8391).withOpacity(0.7),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+          child: IntrinsicHeight(
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Flexible(
+                  flex: 2,
+                  child: Container(
+                    color: _topColor.withOpacity(0.3),//Color(0xFF3E8391).withOpacity(0.3),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
                               child:
-                                  Icon(_icone, color: Colors.black, size: 26.0),
+                                  Icon(_icone, color: Colors.black, size: 20.0),
                             ),
                           ],
                         ),
@@ -308,12 +344,9 @@ class ProgramaState extends State<Programa> {
                           height: 8.0,
                         ),
                         Row(
-                          // mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.max,
-                          // crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Expanded(
-                              // color: Colors.yellowAccent,
                               child: Center(
                                 child: Text(
                                   '${document.hInicio}',
@@ -333,180 +366,92 @@ class ProgramaState extends State<Programa> {
                     ),
                   ),
                 ),
-              ),
-              Flexible(
-                flex: 8,
-                fit: FlexFit.tight,
-                child: Container(
-                  // color: Colors.grey[100],
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      // mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Flexible(
-                              child: Container(
-                                child: Text(
-                                  document.nomeAtividade,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w700),
-                                  overflow: TextOverflow.ellipsis,
+                Flexible(
+                  flex: 8,
+                  fit: FlexFit.tight,
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 8.0),
+                      child: Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Flexible(
+                                child: Container(
+                                  child: Text(
+                                    document.nomeAtividade,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w700),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Divider(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Text(
-                                      'DURAÇÃO',
-                                      style:
-                                          _formatResponsavelDuracaoTituloText(),
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Text(
-                                      '${document.duracao} min',
-                                      style: _formatResponsavelDuracaoText(),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                            _getFimAtividade(document.hFim),
-                            Column(
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Text(
-                                      'RESPONSÁVEL',
-                                      style:
-                                          _formatResponsavelDuracaoTituloText(),
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Text(
-                                      document.responsavel,
-                                      style: _formatResponsavelDuracaoText(),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                          // Divider(),
+                          SizedBox(height: 8.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Text(
+                                        'DURAÇÃO',
+                                        style:
+                                            _formatResponsavelDuracaoTituloText(),
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Text(
+                                        '${document.duracao} min',
+                                        style: _formatResponsavelDuracaoText(),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              _getFimAtividade(document.hFim),
+                              Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Text(
+                                        'RESPONSÁVEL',
+                                        style:
+                                            _formatResponsavelDuracaoTituloText(),
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Text(
+                                        document.responsavel,
+                                        style: _formatResponsavelDuracaoText(),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
-
-    // return Container(
-    //   decoration: BoxDecoration(color: Colors.white),
-    //   child: new Stack(
-    //     children: <Widget>[
-    //       new Padding(
-    //         padding: const EdgeInsets.only(left: 45.0),
-    //         child: Container(
-    //           width: double.infinity,
-    //           child: Padding(
-    //             padding: const EdgeInsets.fromLTRB(4.0, 8.0, 12.0, 8.0),
-    //             child: Column(
-    //               mainAxisAlignment: MainAxisAlignment.start,
-    //               mainAxisSize: MainAxisSize.max,
-    //               crossAxisAlignment: CrossAxisAlignment.start,
-    //               children: <Widget>[
-    //                 Padding(
-    //                   padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 3.0),
-    //                   child: Text(
-    //                     document.nomeAtividade,
-    //                     style: TextStyle(
-    //                         fontSize: 16.0, fontWeight: FontWeight.w500),
-    //                   ),
-    //                 ),
-    //                 Row(
-    //                   mainAxisAlignment: MainAxisAlignment.start,
-    //                   mainAxisSize: MainAxisSize.max,
-    //                   children: <Widget>[
-    //                     Padding(
-    //                       padding: const EdgeInsets.only(left: 8.0, right: 3.0),
-    //                       child: Icon(
-    //                         Icons.schedule,
-    //                         size: 14.0,
-    //                       ),
-    //                     ),
-    //                     Text(
-    //                       '${document.hInicio} - ${document.duracao} min',
-    //                       style: TextStyle(fontSize: 14.0),
-    //                     ),
-    //                     Padding(
-    //                       padding:
-    //                           const EdgeInsets.only(left: 10.0, right: 3.0),
-    //                       child: Icon(
-    //                         Icons.person,
-    //                         size: 14.0,
-    //                       ),
-    //                     ),
-    //                     Text(
-    //                       document.responsavel,
-    //                       style: TextStyle(fontSize: 14.0),
-    //                     ),
-    //                   ],
-    //                 ),
-    //               ],
-    //             ),
-    //           ),
-    //         ),
-    //       ),
-    //       new Positioned(
-    //         top: 0.0,
-    //         bottom: 0.0,
-    //         left: 30.0,
-    //         child: new Container(
-    //           height: double.infinity,
-    //           width: 1.0,
-    //           color: Color(0xFFBACEE6),
-    //         ),
-    //       ),
-    //       new Positioned(
-    //         //TODO: use checkbox?
-    //         top: 15.0,
-    //         left: 10.0,
-    //         child: new Container(
-    //           height: 40.0,
-    //           width: 40.0,
-    //           child: new Icon(_icone, color: Colors.white, size: 30.0),
-    //           decoration: new BoxDecoration(
-    //             shape: BoxShape.circle,
-    //             color: Color(0xFFA7B9D1),
-    //           ),
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    // );
   }
 
   Widget _getFimAtividade(String hFim) {
@@ -566,13 +511,14 @@ class ProgramaState extends State<Programa> {
     );
   }
 
-  BlocProvider<ProgramaNotificationBloc> _makeAndroidProgramaNotificationSubs() {
+  BlocProvider<ProgramaNotificationBloc>
+      _makeAndroidProgramaNotificationSubs() {
     return BlocProvider<ProgramaNotificationBloc>(
-      bloc: ProgramaNotificationBloc(),
-      child: Padding(
-        padding: const EdgeInsets.only(right: 8.0),
-        child: NotificarButtonWidget(),
-      )    );
+        bloc: ProgramaNotificationBloc(),
+        child: Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: NotificarButtonWidget(),
+        ));
   }
 
   CupertinoPageScaffold _iosProgramaPage(BuildContext context, BlocDados bloc) {

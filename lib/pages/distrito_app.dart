@@ -48,16 +48,17 @@ class DistritoAppState extends State<DistritoApp> {
   Widget build(BuildContext context) {
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
-    final ThemeData kIOSTheme = new ThemeData(
-      primarySwatch: Colors.blue,
-      primaryColor: Colors.grey[200],
-      primaryColorBrightness: Brightness.light,
-    );
+    // final ThemeData kIOSTheme = new ThemeData(
+    //   primarySwatch: Colors.blue,
+    //   primaryColor: Colors.grey[200],
+    //   primaryColorBrightness: Brightness.light,
+    // );
 
     final ThemeData kDefaultTheme = new ThemeData(
-      primaryColor: Color(0xFF003366), //Colors.lightBlueAccent[700],
+      primaryColor: Colors.blueGrey[500], //Color(0xFF003366), //Colors.lightBlueAccent[700],
+      secondaryHeaderColor: Colors.blueGrey[100],
       backgroundColor: Color(0xFFF3FDFE),
-      bottomAppBarColor: Color(0xFF003366),
+      bottomAppBarColor: Colors.blueGrey[50],//Color(0xFF003366),
     );
 
     if (isIOS) {

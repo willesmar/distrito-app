@@ -18,8 +18,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../model/contato.dart';
 
 class Sobre extends StatelessWidget {
-  Color _cardHeaderColor = Color(0xFF2F557F);
-  Color _cardHeaderColorFont = Colors.white;
+  Color _cardHeaderColor = Colors.blueGrey[200];
+  Color _cardHeaderColorFont = Colors.black87;
 
   _launchMAPS(String lat, String long, {isIOS: false}) async {
     String appleUrl = 'http://maps.apple.com/?ll=${lat},${long}';
@@ -44,13 +44,13 @@ class Sobre extends StatelessWidget {
         iconeDinamico = Icons.phone;
         break;
       case 'sitemap':
-        iconeDinamico = Icons.error;
+        iconeDinamico = IconData(0xe9c9, fontFamily: 'icomoon');
         break;
       case 'envelope':
         iconeDinamico = Icons.mail_outline;
         break;
       case 'blog':
-        iconeDinamico = Icons.error;
+        iconeDinamico = IconData(0xea9c, fontFamily: 'icomoon');
         break;
       case 'whatsapp':
         iconeDinamico = CustomIcons.whatsapp;
@@ -440,10 +440,14 @@ class Sobre extends StatelessWidget {
             minSize: 35.0,
             padding: EdgeInsets.all(0.0),
             child: Icon(
-                IconData(0xf459,
-                    fontFamily: 'CupertinoIcons',
-                    fontPackage: 'cupertino_icons'),
+                IconData(0xe029,
+                    fontFamily: 'icomoon'),
                 size: 30.0),
+            // child: Icon(
+            //     IconData(0xf459,
+            //         fontFamily: 'CupertinoIcons',
+            //         fontPackage: 'cupertino_icons'),
+            //     size: 30.0),
             onPressed: () {
               _deletePrefs(context);
             }),
@@ -471,7 +475,10 @@ class Sobre extends StatelessWidget {
         title: Text('Sobre'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.account_balance), //TODO: escolher icon melhor
+            icon: Icon(
+                IconData(0xe029,
+                    fontFamily: 'icomoon')),
+            // icon: Icon(Icons.account_balance), //TODO: escolher icon melhor
             onPressed: () {
               _deletePrefs(context);
             },

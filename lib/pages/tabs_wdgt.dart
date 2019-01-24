@@ -63,29 +63,45 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
           iconSize: 24.0,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(IconData(0xf42e,
-                  fontFamily: 'CupertinoIcons',
-                  fontPackage: 'cupertino_icons')),
+              icon: Icon(IconData(0xe9a9, fontFamily: 'icomoon')),
               title: Text('Mensagem'),
             ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(IconData(0xf42e,
+            //       fontFamily: 'CupertinoIcons',
+            //       fontPackage: 'cupertino_icons')),
+            //   title: Text('Mensagem'),
+            // ),
             BottomNavigationBarItem(
-              icon: Icon(IconData(0xf2d1,
-                  fontFamily: 'CupertinoIcons',
-                  fontPackage: 'cupertino_icons')),
+              icon: Icon(IconData(0xe901, fontFamily: 'icomoon')),
               title: Text('Comunicação'),
             ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(IconData(0xf2d1,
+            //       fontFamily: 'CupertinoIcons',
+            //       fontPackage: 'cupertino_icons')),
+            //   title: Text('Comunicação'),
+            // ),
             BottomNavigationBarItem(
-              icon: Icon(IconData(0xf453,
-                  fontFamily: 'CupertinoIcons',
-                  fontPackage: 'cupertino_icons')),
+              icon: Icon(IconData(0xea72, fontFamily: 'icomoon')),
               title: Text('Programa'),
             ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(IconData(0xf453,
+            //       fontFamily: 'CupertinoIcons',
+            //       fontPackage: 'cupertino_icons')),
+            //   title: Text('Programa'),
+            // ),
             BottomNavigationBarItem(
-              icon: Icon(IconData(0xf44c,
-                  fontFamily: 'CupertinoIcons',
-                  fontPackage: 'cupertino_icons')),
+              icon: Icon(IconData(0xea0c, fontFamily: 'icomoon')),
               title: Text('Sobre'),
             ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(IconData(0xf44c,
+            //       fontFamily: 'CupertinoIcons',
+            //       fontPackage: 'cupertino_icons')),
+            //   title: Text('Sobre'),
+            // ),
           ],
         ),
         tabBuilder: (BuildContext context, int index) {
@@ -131,17 +147,20 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         bottomNavigationBar: new Material(
-          elevation: 0.5,
-          color: Theme.of(context).primaryColor, //Colors.green[900],
+          elevation: 4.0,
+          color: Theme.of(context).bottomAppBarColor, //Colors.green[900],
           child: new TabBar(
             controller: controller,
-            labelStyle: new TextStyle(fontSize: 9.0),
+            labelStyle: new TextStyle(fontSize: 10.0),
+            labelColor: Colors.black87,
+            unselectedLabelColor: Colors.black54,
             indicatorWeight: 0.01,
             indicatorColor: Colors.transparent, //(0xFF36424E),
             tabs: <Tab>[
               new Tab(
-                icon: new Icon(CustomIcons.fire_station),
-                text: 'Msg',
+                icon: Icon(IconData(0xe9a9, fontFamily: 'icomoon')),
+                // icon: new Icon(CustomIcons.fire_station),
+                text: 'Mensagem',
               ),
               // new Tab( //XXX: CRM qnd tiver implementado na ES
               //   icon: Transform(
@@ -152,15 +171,18 @@ class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
               //   text: 'CRM',
               // ),
               new Tab(
-                icon: new Icon(Icons.event_note),
-                text: 'Com',
+                icon: Icon(IconData(0xe91a, fontFamily: 'icomoon')),
+                // icon: new Icon(Icons.event_note),
+                text: 'Comunicação',
               ),
               new Tab(
-                icon: new Icon(Icons.local_activity),
-                text: 'Prgrm',
+                icon: Icon(IconData(0xea72, fontFamily: 'icomoon')),
+                // icon: new Icon(Icons.local_activity),
+                text: 'Programa',
               ),
               new Tab(
-                icon: new Icon(Icons.location_city),
+                icon: Icon(IconData(0xea0c, fontFamily: 'icomoon')),
+                // icon: new Icon(Icons.location_city),
                 text: 'Sobre',
               ),
             ],

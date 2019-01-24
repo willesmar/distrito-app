@@ -76,9 +76,12 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
   fonts:
-  - family:  CustomIcons
+  - family: CustomIcons
     fonts:
       - asset: assets/fonts/CustomIcons.ttf
   - family: Digital-7
     fonts:
       - asset: assets/fonts/digital-7.ttf
+  - family: icomoon
+    fonts:
+      - asset: assets/fonts/icomoon.ttf
